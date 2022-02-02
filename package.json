@@ -1,0 +1,39 @@
+{
+    "name": "@cazoo/maybe",
+    "main": "lib/index.js",
+    "version": "1.0.0",
+    "description": "Utility types for handling uncertain values",
+    "scripts": {
+        "build": "tsc",
+        "test": "jest",
+        "lint": "eslint 'src/**/*.{ts,tsx}'",
+        "fix": "eslint --fix 'src/**/*.{ts,tsx}'",
+        "prepare": "npm run build",
+        "prepublishOnly": "npm run test && npm run lint",
+        "preversion": "npm run lint",
+        "version": "npm run fix && git add -A src",
+        "postversion": "git push && git push --tags",
+        "doc:generate": "typedoc --out maybe.wiki/wiki --excludePrivate --readme none src"
+    },
+    "files": [
+        "lib/**/*"
+    ],
+    "license": "MIT",
+    "devDependencies": {
+        "@cazoo/eslint-plugin-eslint": "^1.0.2",
+        "@types/jest": "^27.4.0",
+        "@types/node": "^12.11.7",
+        "@typescript-eslint/eslint-plugin": "3",
+        "@typescript-eslint/parser": "3",
+        "@typescript-eslint/typescript-estree": "^5.10.2",
+        "eslint": "^7.32.0",
+        "eslint-config-prettier": "^4.2.0",
+        "eslint-plugin-prettier": "^3.0.1",
+        "jest": "^27.4.7",
+        "prettier": "^1.17.0",
+        "ts-jest": "^27.1.3",
+        "ts-loader": "^5.3.3",
+        "typedoc": "^0.22.11",
+        "typescript": "^4.5.5"
+    }
+}

@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "declaration": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "noUnusedLocals": false,
+        "noUnusedParameters": true,
+        "outDir": "lib",
+        "strict": false,
+        "target": "esnext"
+    },
+    "include": ["src/*.ts"],
+    "exclude": ["src/*.test.ts", "test*"]
+}
