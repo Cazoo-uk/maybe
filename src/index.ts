@@ -1,3 +1,2 @@
-export default function isFoo(x: unknown) {
-  return x === "foo";
-}
+export * from "./option";
+export * from "./result";

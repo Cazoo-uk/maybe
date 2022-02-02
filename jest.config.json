@@ -1,0 +1,14 @@
+{
+  "globals": {
+    "ts-jest": {
+      "isolatedModules": true
+    }
+  },
+  "roots": ["<rootDir>"],
+  "transform": {
+    "^.+\\.tsx?$": "ts-jest"
+  },
+  "testRegex": "\\.test\\.tsx?$",
+  "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json"],
+  "testEnvironment": "node"
+}
