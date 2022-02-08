@@ -1,5 +1,5 @@
 import { Option } from "../option";
-import { Result } from "./result";
+import * as Result from "./result";
 
 describe("[Result]", () => {
     describe("[flatten]", () => {

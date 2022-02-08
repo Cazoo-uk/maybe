@@ -1,6 +1,6 @@
 import { Result, ResultLike } from "../result";
-import { Option } from "./option";
-import { IsSome, OptionLike, SomeSymbol } from "./option-like";
+import * as Option from "./option";
+import { IsSome, SomeSymbol, OptionLike } from "./option-like";
 
 export class Some<A> implements OptionLike<A>, IsSome<A> {
     readonly [SomeSymbol] = true;

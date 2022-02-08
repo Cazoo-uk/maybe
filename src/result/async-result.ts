@@ -1,5 +1,5 @@
 import { AsyncOption } from "../option";
-import { Result } from "./result";
+import * as Result from "./result";
 import { ResultLike } from "./result-like";
 
 export class AsyncResult<A, E> {

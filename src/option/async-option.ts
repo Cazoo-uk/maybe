@@ -1,6 +1,6 @@
 import { AsyncResult } from "../result";
+import * as Option from "./option";
 import { OptionLike } from "./option-like";
-import { Option } from "./option";
 
 export class AsyncOption<A> {
     constructor(private readonly promise: Promise<OptionLike<A>>) {}

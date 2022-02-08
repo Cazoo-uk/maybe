@@ -1,5 +1,5 @@
 import { Result } from "../result";
-import { Option } from "./option";
+import * as Option from "./option";
 
 describe("[Option]", () => {
     describe("[flatten]", () => {
@@ -14,6 +14,24 @@ describe("[Option]", () => {
             );
 
             expect(actual).toEqual(Option.some(Option.some(1)));
+        });
+    });
+
+    describe("[isOption]", () => {
+        describe("when is option", () => {
+            const cases = [Option.some(1), Option.none()];
+
+            it.each(cases)("should be true for %o", actual => {
+                expect(actual).toBe(true);
+            });
+        });
+
+        describe("when is not option", () => {
+            const cases = [null, undefined, 1, "hello", { a: 1 }];
+
+            it.each(cases)("should be false for %s", actual => {
+                expect(actual).toBe(false);
+            });
         });
     });
 

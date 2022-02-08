@@ -110,5 +110,3 @@ export interface IsSome<T> {
     [SomeSymbol]: true;
     intoSome(): T;
 }
-
-export type Option<T> = OptionLike<T> & (IsSome<T> | IsNone);

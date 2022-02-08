@@ -1,6 +1,6 @@
 import { Result } from "../result";
 import { EmptyOptionError } from "./none";
-import { Option } from "./option";
+import * as Option from "./option";
 
 describe("[None]", () => {
     describe("[and]", () => {

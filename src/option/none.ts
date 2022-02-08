@@ -1,5 +1,5 @@
 import { Result, ResultLike } from "../result";
-import { Option } from "./option";
+import * as Option from "./option";
 import { IsNone, OptionLike, SomeSymbol } from "./option-like";
 
 export class EmptyOptionError extends Error {}

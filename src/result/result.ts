@@ -3,36 +3,38 @@ import { Ok } from "./ok";
 import { IsErr, IsOk, ResultLike } from "./result-like";
 import { Option, OptionLike } from "../option";
 
-export class Result {
-    static err = <E, A = never>(
-        error: E,
-    ): ResultLike<A, E> & IsErr<E> => {
-        return new Err(error);
-    };
+export type Undecided<T, E> = ResultLike<T, E> & (IsOk<T> | IsErr<E>);
 
-    static flatten = <T, E>(
-        result: ResultLike<ResultLike<T, E>, E>,
-    ): ResultLike<T, E> => {
-        return result.unwrapOrElse(error => Result.err(error));
-    };
+export const err = <E, A = never>(
+    error: E,
+): ResultLike<A, E> & IsErr<E> => {
+    return new Err(error);
+};
 
-    static intoOkOrError = <T>(result: ResultLike<T, T>): T => {
-        return result.unwrapOrElse(error => error);
-    };
+export const flatten = <T, E>(
+    result: ResultLike<ResultLike<T, E>, E>,
+): ResultLike<T, E> => {
+    return result.unwrapOrElse(error => err(error));
+};
 
-    static isResult = <T, E>(value: any): value is ResultLike<T, E> => {
-        return value instanceof Ok || value instanceof Err;
-    };
+export const intoOkOrError = <T>(result: ResultLike<T, T>): T => {
+    return result.unwrapOrElse(error => error);
+};
 
-    static ok = <T, E = never>(value: T): ResultLike<T, E> & IsOk<T> => {
-        return new Ok(value);
-    };
+export const isResult = <T, E>(value: any): value is ResultLike<T, E> => {
+    return value instanceof Ok || value instanceof Err;
+};
 
-    static transpose = <T, E>(
-        result: ResultLike<OptionLike<T>, E>,
-    ): OptionLike<ResultLike<T, E>> => {
-        return result.isOk()
-            ? result.intoOk().map(Result.ok)
-            : Option.some(result as ResultLike<any, E>);
-    };
-}
+export const ok = <T, E = never>(
+    value: T,
+): ResultLike<T, E> & IsOk<T> => {
+    return new Ok(value);
+};
+
+export const transpose = <T, E>(
+    result: ResultLike<OptionLike<T>, E>,
+): OptionLike<ResultLike<T, E>> => {
+    return result.isOk()
+        ? result.intoOk().map(ok)
+        : Option.some(result as ResultLike<any, E>);
+};

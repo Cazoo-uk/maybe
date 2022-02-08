@@ -1,3 +1,5 @@
-export { AsyncResult } from "./async-result";
-export { Result } from "./result";
-export { IsErr, IsOk, ResultLike } from "./result-like";
+import * as Result from "./result";
+import { AsyncResult } from "./async-result";
+import { IsErr, IsOk, ResultLike } from "./result-like";
+
+export { AsyncResult, IsErr, IsOk, Result, ResultLike };

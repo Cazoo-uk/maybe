@@ -14,7 +14,7 @@
         "version": "npm run fix && git add -A src",
         "postversion": "git push && git push --tags",
         "doc:generate": "typedoc --out lib/doc src",
-        "doc:open": "open dist/doc/index.html"
+        "doc:open": "open lib/doc/index.html"
     },
     "files": [
         "lib/**/*"

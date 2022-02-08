@@ -1,5 +1,5 @@
 import { EmptyResultError } from "./err";
-import { Result } from "./result";
+import * as Result from "./result";
 import { Option } from "../option";
 
 describe("[Err]", () => {

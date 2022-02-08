@@ -1,6 +1,6 @@
 import { Option } from "../option";
 import { ResultIsOkError } from "./ok";
-import { Result } from "./result";
+import * as Result from "./result";
 
 describe("[Ok]", () => {
     describe("[and]", () => {

@@ -1,7 +1,7 @@
 import { AsyncResult } from "./async-result";
 import { EmptyResultError } from "./err";
 import { ResultIsOkError } from "./ok";
-import { Result } from "./result";
+import * as Result from "./result";
 import { ResultLike } from "./result-like";
 import { Option } from "../option";
 
