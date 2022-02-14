@@ -2,31 +2,31 @@ import { Result, ResultLike } from "../result";
 import * as Option from "./option";
 import { IsSome, SomeSymbol, OptionLike } from "./option-like";
 
-export class Some<A> implements OptionLike<A>, IsSome<A> {
+export class Some<T> implements OptionLike<T>, IsSome<T> {
     readonly [SomeSymbol] = true;
-    constructor(private readonly value: A) {}
+    constructor(private readonly value: T) {}
 
-    and<B>(option: OptionLike<B>): OptionLike<B> {
+    and<U>(option: OptionLike<U>): OptionLike<U> {
         return option;
     }
 
-    andThen<B>(fn: (value: A) => OptionLike<B>): OptionLike<B> {
+    andThen<U>(fn: (value: T) => OptionLike<U>): OptionLike<U> {
         return fn(this.value);
     }
 
-    apply<T>(fn: (option: OptionLike<A>) => T): T {
+    apply<U>(fn: (option: OptionLike<T>) => U): U {
         return fn(this);
     }
 
-    contains(value: A): boolean {
+    contains(value: T): boolean {
         return this.value === value;
     }
 
-    expect(): A {
+    expect(): T {
         return this.value;
     }
 
-    filter<B extends A>(fn: (value: A) => boolean): OptionLike<A | B> {
+    filter<U extends T>(fn: (value: T) => boolean): OptionLike<T | U> {
         return fn(this.value) ? this : Option.none();
     }
 
@@ -38,66 +38,66 @@ export class Some<A> implements OptionLike<A>, IsSome<A> {
         return true;
     }
 
-    iter(): IterableIterator<A> {
+    iter(): IterableIterator<T> {
         return [this.value][Symbol.iterator]();
     }
 
-    map<B>(fn: (value: A) => B): OptionLike<B> {
+    map<U>(fn: (value: T) => U): OptionLike<U> {
         return new Some(fn(this.value));
     }
 
-    mapOr<B>(_: B, fn: (value: A) => B): OptionLike<B> {
+    mapOr<U>(_: U, fn: (value: T) => U): OptionLike<U> {
         return this.map(fn);
     }
 
-    mapOrElse<B>(_: () => B, fn: (value: A) => B): OptionLike<B> {
+    mapOrElse<U>(_: () => U, fn: (value: T) => U): OptionLike<U> {
         return this.map(fn);
     }
 
-    okOr<E>(): ResultLike<A, E> {
+    okOr<E>(): ResultLike<T, E> {
         return Result.ok(this.value);
     }
 
-    okOrElse<E>(): ResultLike<A, E> {
+    okOrElse<E>(): ResultLike<T, E> {
         return Result.ok(this.value);
     }
 
-    or(): OptionLike<A> {
+    or(): OptionLike<T> {
         return this;
     }
 
-    orElse(): OptionLike<A> {
+    orElse(): OptionLike<T> {
         return this.or();
     }
 
-    unwrap(): A {
+    unwrap(): T {
         return this.value;
     }
 
-    unwrapOr<B>(): A | B {
+    unwrapOr<U>(): T | U {
         return this.unwrap();
     }
 
-    unwrapOrElse<B>(): A | B {
+    unwrapOrElse<U>(): T | U {
         return this.unwrap();
     }
 
-    xor(option: OptionLike<A>): OptionLike<A> {
+    xor(option: OptionLike<T>): OptionLike<T> {
         return option.isSome() ? Option.none() : this;
     }
 
-    zip<B>(option: OptionLike<B>): OptionLike<[A, B]> {
+    zip<U>(option: OptionLike<U>): OptionLike<[T, U]> {
         return option.map(value => [this.value, value]);
     }
 
-    zipWith<B, C>(
-        option: OptionLike<B>,
-        fn: (a: A, b: B) => C,
-    ): OptionLike<C> {
+    zipWith<U, Z>(
+        option: OptionLike<U>,
+        fn: (a: T, b: U) => Z,
+    ): OptionLike<Z> {
         return option.map(value => fn(this.value, value));
     }
 
-    intoSome(): A {
+    intoSome(): T {
         return this.value;
     }
 }

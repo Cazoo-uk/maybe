@@ -1,21 +1,25 @@
 import { Result, ResultLike } from "../result";
 import * as Option from "./option";
-import { IsNone, OptionLike, SomeSymbol } from "./option-like";
 
-export class EmptyOptionError extends Error {}
+import {
+    EmptyOptionError,
+    IsNone,
+    OptionLike,
+    SomeSymbol,
+} from "./option-like";
 
-export class None<A> implements OptionLike<A>, IsNone {
+export class None<T> implements OptionLike<T>, IsNone {
     readonly [SomeSymbol] = false;
 
-    and<B>(): OptionLike<B> {
+    and<U>(): OptionLike<U> {
         return this as OptionLike<any> & IsNone;
     }
 
-    andThen<B>(): OptionLike<B> {
+    andThen<U>(): OptionLike<U> {
         return this as OptionLike<any> & IsNone;
     }
 
-    apply<T>(fn: (option: OptionLike<A>) => T): T {
+    apply<U>(fn: (option: OptionLike<T>) => U): U {
         return fn(this);
     }
 
@@ -23,11 +27,11 @@ export class None<A> implements OptionLike<A>, IsNone {
         return false;
     }
 
-    expect(message: string): A {
+    expect(message: string): T {
         throw new EmptyOptionError(message);
     }
 
-    filter<B extends A>(): OptionLike<B> {
+    filter<U extends T>(): OptionLike<U> {
         return this as OptionLike<any> & IsNone;
     }
 
@@ -39,55 +43,55 @@ export class None<A> implements OptionLike<A>, IsNone {
         return false;
     }
 
-    iter(): IterableIterator<A> {
+    iter(): IterableIterator<T> {
         return [][Symbol.iterator]();
     }
 
-    map<B>(): OptionLike<B> {
+    map<U>(): OptionLike<U> {
         return this as OptionLike<any> & IsNone;
     }
 
-    mapOr<B>(or: B): OptionLike<B> {
+    mapOr<U>(or: U): OptionLike<U> {
         return Option.some(or);
     }
 
-    mapOrElse<B>(or: () => B): OptionLike<B> {
+    mapOrElse<U>(or: () => U): OptionLike<U> {
         return Option.some(or());
     }
 
-    okOr<E>(error: E): ResultLike<A, E> {
+    okOr<E>(error: E): ResultLike<T, E> {
         return Result.err(error);
     }
 
-    okOrElse<E>(fn: () => E): ResultLike<A, E> {
+    okOrElse<E>(fn: () => E): ResultLike<T, E> {
         return Result.err(fn());
     }
 
-    or<B>(option: OptionLike<B>): OptionLike<A | B> {
+    or<U>(option: OptionLike<U>): OptionLike<T | U> {
         return option;
     }
 
-    orElse<B>(fn: () => OptionLike<B>): OptionLike<A | B> {
+    orElse<U>(fn: () => OptionLike<U>): OptionLike<T | U> {
         return fn();
     }
 
-    unwrap(): A {
+    unwrap(): T {
         throw new EmptyOptionError("unwrap called on None");
     }
 
-    unwrapOr<B>(value: B): A | B {
+    unwrapOr<U>(value: U): T | U {
         return value;
     }
 
-    unwrapOrElse<B>(fn: () => B): A | B {
+    unwrapOrElse<U>(fn: () => U): T | U {
         return fn();
     }
 
-    xor(option: OptionLike<A>): OptionLike<A> {
+    xor(option: OptionLike<T>): OptionLike<T> {
         return option;
     }
 
-    zip<B>(): OptionLike<[A, B]> {
+    zip<U>(): OptionLike<[T, U]> {
         return this as OptionLike<any>;
     }
 

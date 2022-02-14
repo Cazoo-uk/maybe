@@ -1,5 +1,5 @@
 import { Result } from "../result";
-import { EmptyOptionError } from "./none";
+import { EmptyOptionError } from "./option-like";
 import * as Option from "./option";
 
 describe("[None]", () => {
