@@ -551,11 +551,42 @@ export interface OptionLike<T> {
 
 export const SomeSymbol = Symbol("Option.IsSome");
 
+/**
+ * Represents an option that doesn't contain a value.
+ *
+ * This interface does expose any functionality. It only exists in order
+ * to allow the compiler to distinguish between `OptionLike<T>` and
+ * `OptionLike<T> & IsNone`.
+ */
 export interface IsNone {
     [SomeSymbol]: false;
 }
 
+/**
+ * Represents an option that contains a value. Use
+ * {@link OptionLike.isSome} to assert that an option implements this
+ * interface.
+ */
 export interface IsSome<T> {
     [SomeSymbol]: true;
+
+    /**
+     * Identical to {@link OptionLike.unwrap} but will never throw an
+     * error. We can provide this guarantee because this method only
+     * exists on options that contain values.
+     *
+     * ```typescript
+     * Option.some(1).intoSome();
+     * // returns 1
+     *
+     * function realisticExample(option: OptionLike<number>) {
+     *   if (option.isSome()) {
+     *      const value = option.intoSome();
+     *      // do other things...
+     *   }
+     * }
+     * ```
+     * @since 0.1.0
+     */
     intoSome(): T;
 }

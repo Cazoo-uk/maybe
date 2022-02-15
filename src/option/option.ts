@@ -1,7 +1,3 @@
-/**
- * Some example text
- */
-
 import { Result, ResultLike } from "../result";
 import { None } from "./none";
 import { IsNone, IsSome, OptionLike } from "./option-like";
@@ -29,9 +25,8 @@ import { Some } from "./some";
  *       throw new Error("option is empty");
  *     }
  *
- *     // COMPILE ERROR!
  *     // ...but here it is still just `OptionLike`, which does not
- *     // implement `IsSome`.
+ *     // implement `IsSome` i.e. DOES NOT COMPILE!
  *     option.intoSome();
  * }
  *
@@ -63,14 +58,18 @@ export type Undecided<T> = OptionLike<T> & (IsSome<T> | IsNone);
  * Turns an option of an option of a value into an option of a value. In
  * other words, it un-nests a nested option.
  *
- * Note that this only works for one level of nesting!
+ * Note that this only works for **one** level of nesting! It's easy to
+ * write code that works for any number of levels but it's not easy to
+ * express this using TypeScript.
  *
- * It's easy to write code that works for any number of levels but it's
- * difficult to express this with the type system.
- *
- * @param option To be flattened
+ * ```typescript
+ * const option = Option.some(Option.some(1));
+ * Option.flatten(option);
+ * // returns Option.some(1)
+ * ```
  * @todo Can we extend this to work for any level of nesting?
  * @typeParam T Type of wrapped value
+ * @param option To be flattened
  * @since 0.1.0
  */
 export const flatten = <T>(
@@ -83,9 +82,16 @@ export const flatten = <T>(
  * Turns an "optional" value into an option of a value. Returns `None` if
  * the provided value is `null` or `undefined`, otherwise `Some(value)`.
  *
+ * ```typescript
+ * Option.from(1);
+ * // returns Option.some(1)
+ *
+ * Option.from(null);
+ * // returns Option.none()
+ * ```
  * @typeParam T Type of value to be wrapped
- * @since 0.1.0
  * @param value The value to be wrapped
+ * @since 0.1.0
  */
 export const from = <T>(value: T | null | undefined): OptionLike<T> => {
     return value === null || value === undefined ? none() : some(value);
@@ -101,9 +107,19 @@ export const from = <T>(value: T | null | undefined): OptionLike<T> => {
  * `isOption` will infer the wrapped type if possible. Note that this
  * provides no runtime guarantee that the option is of type `T`.
  *
- * @param value Value to be tested
- * @since 0.1.0
+ * ```typescript
+ * Option.isOption(Option.some(1));
+ * // returns true
+ *
+ * Option.isOption(Option.none(1));
+ * // returns true
+ *
+ * Option.isOption(1);
+ * // returns false
+ * ```
  * @typeParam T Type of wrapped value
+ * @param value Test against this
+ * @since 0.1.0
  */
 export const isOption = <T>(value: any): value is OptionLike<T> => {
     return value instanceof Some || value instanceof None;
@@ -111,9 +127,15 @@ export const isOption = <T>(value: any): value is OptionLike<T> => {
 
 /**
  * Creates an empty option.
- * @since 0.1.0
+ *
+ * ```typescript
+ * const option = Option.none();
+ * option.isNone();
+ * // returns true
+ * ```
  * @typeParam T Type of wrapped value (for compatibility with
  * {@link OptionLike} interface).
+ * @since 0.1.0
  */
 export const none = <T = never>(): OptionLike<T> & IsNone => {
     return new None<T>();
@@ -121,9 +143,15 @@ export const none = <T = never>(): OptionLike<T> & IsNone => {
 
 /**
  * Creates an option that wraps a value.
+ *
+ * ```typescript
+ * const option = Option.some(1);
+ * option.isSome();
+ * // returns true
+ * ```
+ * @typeParam T Type of wrapped value
  * @param value Value to be wrapped
  * @since 0.1.0
- * @typeParam T Type of wrapped value
  */
 export const some = <T>(value: T): OptionLike<T> & IsSome<T> => {
     return new Some(value);
@@ -133,10 +161,21 @@ export const some = <T>(value: T): OptionLike<T> & IsSome<T> => {
  * Transposes an option of a result into a result of an option. `None` is
  * mapped to `Ok(None)`. `Some(Ok(value))` and `Some(Err(error))` is
  * mapped to `Ok(Some(value))` and `Err(error)`.
- * @param option Option to be transposed
- * @since 0.1.0
+ *
+ * ```typescript
+ * Option.transpose(Option.none());
+ * // returns Result.ok(Option.none())
+ *
+ * Option.transpose(Option.some(Result.ok(1)));
+ * // returns Result.ok(Option.some(1))
+ *
+ * Option.transpose(Option.some(Result.err("error")));
+ * // returns Result.err("error")
+ * ```
  * @typeParam E Type of error value
  * @typeParam T Type of success value
+ * @param option Option to be transposed
+ * @since 0.1.0
  */
 export const transpose = <T, E>(
     option: OptionLike<ResultLike<T, E>>,
@@ -151,17 +190,14 @@ export const transpose = <T, E>(
  * containing the tuple members. For example:
  *
  * ```typescript
- * const unzipped = Option.some(1)
- *     .zip(Option.some(2))
- *     .apply(Option.unzip);
- *
- * // unzipped == [Option.some(1), Option.some(2)];
+ * const zipped = Option.some(1).zip(Option.some(2))
+ * Option.unzip(zipped);
+ * // returns [Option.some(1), Option.some(2)]
  * ```
- *
- * @param option Option to be unzipped
- * @since 0.1.0
  * @typeParam A Type of first zipped value
  * @typeParam B Type of second zipped value
+ * @param option Option to be unzipped
+ * @since 0.1.0
  */
 export const unzip = <A, B>(
     option: OptionLike<[A, B]>,
