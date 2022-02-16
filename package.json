@@ -1,7 +1,7 @@
 {
     "name": "@cazoo/maybe",
     "main": "lib/index.js",
-    "version": "0.2.0",
+    "version": "0.1.0",
     "description": "Template for creating Typescript OSS packages",
     "scripts": {
         "build": "tsc",
@@ -13,7 +13,7 @@
         "preversion": "npm run lint",
         "version": "npm run fix && git add -A src",
         "postversion": "git push && git push --tags",
-        "doc:generate": "typedoc --out lib/doc src",
+        "doc:generate": "typedoc --out lib/doc --excludePrivate src",
         "doc:open": "open lib/doc/index.html"
     },
     "files": [

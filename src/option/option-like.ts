@@ -8,8 +8,8 @@ import { ResultLike } from "../result";
 export class EmptyOptionError extends Error {}
 
 /**
- * Type Option represents an optional value: every Option is either Some
- * and contains a value, or None, and does not.
+ * Type `Option` represents an optional value: every Option is either
+ * `Some` and contains a value, or `None`, and does not.
  *
  * This class is heavily inspired by Rust's Option type. This option type
  * is immutable, which is the main difference from the Rust original.
@@ -175,7 +175,7 @@ export interface OptionLike<T> {
      * // returns option narrowed to OptionLike<"hello">
      *
      * Option.none().filter(value => value === 2);
-     * // returns Option.none();
+     * // returns Option.none()
      *
      * ```
      * @typeParam U Narrow wrapped value to this type
@@ -192,14 +192,13 @@ export interface OptionLike<T> {
      *
      * ```typescript
      * Option.some(1).filter(value => value === 1);
-     * // returns Option.some(1);
+     * // returns Option.some(1)
      *
      * Option.some(1).filter(value => value === 2);
-     * // returns Option.none();
+     * // returns Option.none()
      *
      * Option.none().filter(value => value === 2);
-     * // returns Option.none();
-     *
+     * // returns Option.none()
      * ```
      * @since 0.1.0
      * @param fn Predicate function
@@ -417,7 +416,7 @@ export interface OptionLike<T> {
      * // returns Option.some(2)
      * ```
      * @typeParam U Type of wrapped value in callback result
-     * @param fn
+     * @param fn Call this if this option is empty
      * @since 0.1.0
      */
     orElse<U>(fn: () => OptionLike<U>): OptionLike<T | U>;
@@ -439,8 +438,8 @@ export interface OptionLike<T> {
      * Option.none().unwrap();
      * // throws error
      * ```
-     * @since 0.1.0
      * @throws {@link EmptyOptionError}
+     * @since 0.1.0
      */
     unwrap(): T;
 

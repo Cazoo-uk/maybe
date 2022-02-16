@@ -54,16 +54,6 @@ describe("[AsyncOption]", () => {
         });
     });
 
-    describe("[apply]", () => {
-        it("should be promise of callback value", () => {
-            const actual = AsyncOption.some(1).apply(option =>
-                option.unwrap(),
-            );
-
-            return expect(actual).resolves.toEqual(1);
-        });
-    });
-
     describe("[asPromise]", () => {
         it("should be underlying promise", () => {
             const actual = AsyncOption.some(1).asPromise();
