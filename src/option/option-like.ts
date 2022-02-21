@@ -11,6 +11,10 @@ export class EmptyOptionError extends Error {}
  * Type `Option` represents an optional value: every Option is either
  * `Some` and contains a value, or `None`, and does not.
  *
+ * `Some` and `None` are modelled as standalone classes but note these
+ * are not exposed. You can create options using the helpers methods
+ * exposed by `Option`.
+ *
  * This class is heavily inspired by Rust's Option type. This option type
  * is immutable, which is the main difference from the Rust original.
  *
@@ -102,12 +106,11 @@ export interface OptionLike<T> {
      * @param fn Passes the option to this callback
      * @typeParam U Return type of `fn`
      * @since 0.1.0
-     *
      */
     apply<U>(fn: (option: OptionLike<T>) => U): U;
 
     /**
-     * Returns true if the option is a Some value containing the given value.
+     * Returns true if the option is `Some` and contains the given value.
      * Compares using strict equality.
      *
      * ```typescript
@@ -144,7 +147,7 @@ export interface OptionLike<T> {
      * Option.none().expect("It exists");
      * // throws error
      * ```
-     * @param message
+     * @param message Use this in the error
      * @since 0.1.0
      * @throws {@link EmptyOptionError}
      */
@@ -287,8 +290,8 @@ export interface OptionLike<T> {
     map<U>(fn: (value: T) => U): OptionLike<U>;
 
     /**
-     * Returns the provided default result (if none), or applies a
-     * function to the contained value (if any).
+     * Returns the provided default result (if `None`), or applies a
+     * function to the contained value (if `Some`).
      *
      * Arguments passed to `mapOr` are eagerly evaluated; if you are
      * passing the result of a function call, it is recommended to use
@@ -315,8 +318,8 @@ export interface OptionLike<T> {
     mapOr<U>(or: U, fn: (value: T) => U): OptionLike<U>;
 
     /**
-     * Computes a default function result (if none), or applies a
-     * different function to the contained value (if any).
+     * Computes a default function result (if `None`), or applies a
+     * different function to the contained value (if `Some`).
      *
      * The function `fn` is called if and only if the option is non-empty.
      * The function `or` is only called if the option *is* empty.
@@ -332,7 +335,7 @@ export interface OptionLike<T> {
      * // returns Option.some(0)
      * ```
      * @typeParam U Map to option of this type
-     * @param or Use this value if option is empty
+     * @param or Use this callback if option is empty
      * @param fn Call this with wrapped value if non-empty
      * @since 0.1.0
      */
@@ -558,6 +561,9 @@ export const SomeSymbol = Symbol("Option.IsSome");
  * `OptionLike<T> & IsNone`.
  */
 export interface IsNone {
+    /**
+     * Static property. Used to discriminate between `Some` and `None`.
+     */
     [SomeSymbol]: false;
 }
 
@@ -567,6 +573,9 @@ export interface IsNone {
  * interface.
  */
 export interface IsSome<T> {
+    /**
+     * Static property. Used to discriminate between `Some` and `None`.
+     */
     [SomeSymbol]: true;
 
     /**
