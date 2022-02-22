@@ -1,0 +1,3 @@
+[submodule "maybe.wiki"]
+	path = maybe.wiki
+	url = git@github.com:Cazoo-uk/maybe.wiki.git
