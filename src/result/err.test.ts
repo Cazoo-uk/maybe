@@ -1,6 +1,6 @@
 import * as Result from "./result";
 import { Option } from "../option";
-import { EmptyResultError } from "./result-like";
+import { UnwrapErrError } from "./result-like";
 
 describe("[Err]", () => {
     const exampleError = new Error("failure");
@@ -82,7 +82,7 @@ describe("[Err]", () => {
         it("should throw appropriate error type", () => {
             const behaviour = () =>
                 Result.err(exampleError).expect("message");
-            expect(behaviour).toThrowError(EmptyResultError);
+            expect(behaviour).toThrowError(UnwrapErrError);
         });
 
         it("should throw error with message", () => {
@@ -198,7 +198,7 @@ describe("[Err]", () => {
     describe("[unwrap]", () => {
         it("should throw appropriate error type", () => {
             const behaviour = () => Result.err(exampleError).unwrap();
-            expect(behaviour).toThrowError(EmptyResultError);
+            expect(behaviour).toThrowError(exampleError);
         });
     });
 

@@ -1,11 +1,12 @@
 import { ResultLike } from "../result";
 
 /**
- * Error thrown when calling `unwrap` or `expect` on None. This error is
- * a simple subclasses of the normal JavaScript `Error` type.
+ * Error thrown when calling {@link OptionLike.unwrap} or
+ * {@link OptionLike.expect} on `None`. This error is a simple subclasses
+ * of the normal JavaScript `Error` type.
  * @since 0.1.0
  */
-export class EmptyOptionError extends Error {}
+export class UnwrapNoneError extends Error {}
 
 /**
  * Type `Option` represents an optional value: every Option is either
@@ -131,7 +132,7 @@ export interface OptionLike<T> {
     contains(value: T): boolean;
 
     /**
-     * Returns the wrapped value. Throws an {@link EmptyOptionError} with
+     * Returns the wrapped value. Throws an {@link UnwrapNoneError} with
      * the given message if called on `None`.
      *
      * As this function can throw an error, it's use is generally
@@ -425,7 +426,7 @@ export interface OptionLike<T> {
     orElse<U>(fn: () => OptionLike<U>): OptionLike<T | U>;
 
     /**
-     * Returns the wrapped value. Throws an {@link EmptyOptionError} if
+     * Returns the wrapped value. Throws an {@link UnwrapNoneError} if
      * called on `None`.
      *
      * As this function can throw an error, it's use is generally

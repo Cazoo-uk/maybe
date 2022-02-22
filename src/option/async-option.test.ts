@@ -1,7 +1,7 @@
 import { Result } from "../result";
 import { AsyncOption } from "./async-option";
 import * as Option from "./option";
-import { EmptyOptionError, OptionLike } from "./option-like";
+import { UnwrapNoneError, OptionLike } from "./option-like";
 
 describe("[AsyncOption]", () => {
     describe("[and]", () => {
@@ -89,7 +89,7 @@ describe("[AsyncOption]", () => {
                 const actual = AsyncOption.none().expect("message");
 
                 return expect(actual).rejects.toBeInstanceOf(
-                    EmptyOptionError,
+                    UnwrapNoneError,
                 );
             });
         });
@@ -324,7 +324,7 @@ describe("[AsyncOption]", () => {
                 const actual = AsyncOption.none().unwrap();
 
                 return expect(actual).rejects.toThrowError(
-                    EmptyOptionError,
+                    UnwrapNoneError,
                 );
             });
         });

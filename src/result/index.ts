@@ -2,10 +2,10 @@ import { AsyncResult } from "./async-result";
 import * as Result from "./result";
 
 import {
-    EmptyResultError,
+    UnwrapErrError,
     IsErr,
     IsOk,
-    ResultIsOkError,
+    UnwrapOkError,
     ResultLike,
 } from "./result-like";
 
@@ -15,6 +15,6 @@ export {
     IsOk,
     Result,
     ResultLike,
-    ResultIsOkError,
-    EmptyResultError,
+    UnwrapOkError,
+    UnwrapErrError,
 };

@@ -1,7 +1,7 @@
 import { Option, OptionLike } from "../option";
 
 import {
-    EmptyResultError,
+    UnwrapErrError,
     IsErr,
     OkSymbol,
     ResultLike,
@@ -36,7 +36,7 @@ export class Err<T, E> implements ResultLike<T, E>, IsErr<E> {
     }
 
     expect(message: string): T {
-        throw new EmptyResultError(message);
+        throw new UnwrapErrError(message);
     }
 
     expectErr(): E {
@@ -88,7 +88,7 @@ export class Err<T, E> implements ResultLike<T, E>, IsErr<E> {
     }
 
     unwrap(): T {
-        throw new EmptyResultError("unwrap called on Err");
+        throw this.error;
     }
 
     unwrapErr(): E {

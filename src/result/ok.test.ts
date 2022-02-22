@@ -1,6 +1,6 @@
 import { Option } from "../option";
 import * as Result from "./result";
-import { ResultIsOkError } from "./result-like";
+import { UnwrapOkError } from "./result-like";
 
 describe("[Ok]", () => {
     describe("[and]", () => {
@@ -99,7 +99,7 @@ describe("[Ok]", () => {
     describe("[expectErr]", () => {
         it("should throw appropriate error type", () => {
             const behaviour = () => Result.ok(1).expectErr("message");
-            expect(behaviour).toThrowError(ResultIsOkError);
+            expect(behaviour).toThrowError(UnwrapOkError);
         });
 
         it("should throw error with message", () => {
@@ -216,7 +216,7 @@ describe("[Ok]", () => {
     describe("[unwrapErr]", () => {
         it("should throw appropriate error type", () => {
             const behaviour = () => Result.ok(1).unwrapErr();
-            expect(behaviour).toThrowError(ResultIsOkError);
+            expect(behaviour).toThrowError(UnwrapOkError);
         });
     });
 

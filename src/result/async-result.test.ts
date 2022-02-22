@@ -2,11 +2,7 @@ import { Option } from "../option";
 import { AsyncResult } from "./async-result";
 import * as Result from "./result";
 
-import {
-    EmptyResultError,
-    ResultIsOkError,
-    ResultLike,
-} from "./result-like";
+import { UnwrapErrError, UnwrapOkError, ResultLike } from "./result-like";
 
 describe("[AsyncResult]", () => {
     const exampleError = new Error("failure");
@@ -148,7 +144,7 @@ describe("[AsyncResult]", () => {
                 );
 
                 return expect(actual).rejects.toBeInstanceOf(
-                    EmptyResultError,
+                    UnwrapErrError,
                 );
             });
         });
@@ -170,7 +166,7 @@ describe("[AsyncResult]", () => {
                 const actual = AsyncResult.ok(1).expectErr("message");
 
                 return expect(actual).rejects.toBeInstanceOf(
-                    ResultIsOkError,
+                    UnwrapOkError,
                 );
             });
         });
@@ -386,10 +382,7 @@ describe("[AsyncResult]", () => {
         describe("when result of err", () => {
             it("should reject with error", () => {
                 const actual = AsyncResult.err(exampleError).unwrap();
-
-                return expect(actual).rejects.toThrowError(
-                    EmptyResultError,
-                );
+                return expect(actual).rejects.toThrowError(exampleError);
             });
         });
     });
@@ -406,9 +399,7 @@ describe("[AsyncResult]", () => {
             it("should reject with error", () => {
                 const actual = AsyncResult.ok(1).unwrapErr();
 
-                return expect(actual).rejects.toThrowError(
-                    ResultIsOkError,
-                );
+                return expect(actual).rejects.toThrowError(UnwrapOkError);
             });
         });
     });

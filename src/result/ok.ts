@@ -1,11 +1,6 @@
 import { Option, OptionLike } from "../option";
 
-import {
-    IsOk,
-    OkSymbol,
-    ResultIsOkError,
-    ResultLike,
-} from "./result-like";
+import { IsOk, OkSymbol, UnwrapOkError, ResultLike } from "./result-like";
 
 export class Ok<T, E> implements ResultLike<T, E>, IsOk<T> {
     readonly [OkSymbol] = true;
@@ -40,7 +35,7 @@ export class Ok<T, E> implements ResultLike<T, E>, IsOk<T> {
     }
 
     expectErr(message: string): E {
-        throw new ResultIsOkError(message);
+        throw new UnwrapOkError(message);
     }
 
     intoOkOrError(): T | E {
@@ -92,7 +87,7 @@ export class Ok<T, E> implements ResultLike<T, E>, IsOk<T> {
     }
 
     unwrapErr(): E {
-        throw new ResultIsOkError("unwrap error called on Ok");
+        throw new UnwrapOkError("unwrap error called on Ok");
     }
 
     unwrapOr<B>(): T | B {

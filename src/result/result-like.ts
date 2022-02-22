@@ -1,7 +1,18 @@
 import { OptionLike } from "../option";
 
-export class EmptyResultError extends Error {}
-export class ResultIsOkError extends Error {}
+/**
+ * Error thrown when calling {@link ResultLike.unwrap} on `Err`. This
+ * error is a simple subclasses of the normal JavaScript `Error` type.
+ * @since 0.1.0
+ */
+export class UnwrapErrError extends Error {}
+
+/**
+ * Error thrown when calling {@link ResultLike.unwrapErr} on `Ok`. This
+ * error is a simple subclasses of the normal JavaScript `Error` type.
+ * @since 0.1.0
+ */
+export class UnwrapOkError extends Error {}
 
 /**
  * `Result<T, E>` is the type used for returning and propagating errors.
@@ -160,7 +171,7 @@ export interface ResultLike<T, E> {
 
     /**
      * Returns the wrapped value if this result is `Ok`. Throws an
-     * {@link EmptyResultError} with the given message if called on
+     * {@link UnwrapErrError} with the given message if called on
      * an `Err`.
      *
      * As this function can throw an error, it's use is generally
@@ -184,7 +195,7 @@ export interface ResultLike<T, E> {
 
     /**
      * Returns the wrapped error if this result is `Err`. Throws an
-     * {@link ResultIsOkError} with the given message if called on
+     * {@link UnwrapOkError} with the given message if called on
      * an `Ok`.
      *
      * As this function can throw an error, it's use is generally
@@ -444,7 +455,7 @@ export interface ResultLike<T, E> {
 
     /**
      * Returns the wrapped value if this result is `Ok`. Throws an
-     * {@link EmptyResultError} with the given message if called on
+     * {@link UnwrapErrError} with the given message if called on
      * an `Err`.
      *
      * As this function can throw an error, it's use is generally
@@ -468,7 +479,7 @@ export interface ResultLike<T, E> {
 
     /**
      * Returns the wrapped error if this result is `Err`. Throws an
-     * {@link ResultIsOkError} with the given message if called on
+     * {@link UnwrapOkError} with the given message if called on
      * an `Ok`.
      *
      * As this function can throw an error, it's use is generally

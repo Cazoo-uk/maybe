@@ -2,7 +2,7 @@ import { Result, ResultLike } from "../result";
 import * as Option from "./option";
 
 import {
-    EmptyOptionError,
+    UnwrapNoneError,
     IsNone,
     OptionLike,
     SomeSymbol,
@@ -28,7 +28,7 @@ export class None<T> implements OptionLike<T>, IsNone {
     }
 
     expect(message: string): T {
-        throw new EmptyOptionError(message);
+        throw new UnwrapNoneError(message);
     }
 
     filter<U extends T>(): OptionLike<U> {
@@ -76,7 +76,7 @@ export class None<T> implements OptionLike<T>, IsNone {
     }
 
     unwrap(): T {
-        throw new EmptyOptionError("unwrap called on None");
+        throw new UnwrapNoneError("unwrap called on None");
     }
 
     unwrapOr<U>(value: U): T | U {

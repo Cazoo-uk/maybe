@@ -1,7 +1,7 @@
 import { AsyncOption } from "./async-option";
 
 import {
-    EmptyOptionError,
+    UnwrapNoneError,
     IsNone,
     IsSome,
     OptionLike,
@@ -11,7 +11,7 @@ import * as Option from "./option";
 
 export {
     AsyncOption,
-    EmptyOptionError,
+    UnwrapNoneError,
     IsNone,
     IsSome,
     Option,

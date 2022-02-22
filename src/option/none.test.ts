@@ -1,5 +1,5 @@
 import { Result } from "../result";
-import { EmptyOptionError } from "./option-like";
+import { UnwrapNoneError } from "./option-like";
 import * as Option from "./option";
 
 describe("[None]", () => {
@@ -37,7 +37,7 @@ describe("[None]", () => {
     describe("[expect]", () => {
         it("should throw EmptyOptionError", () => {
             const behaviour = () => Option.none().expect("message");
-            expect(behaviour).toThrowError(EmptyOptionError);
+            expect(behaviour).toThrowError(UnwrapNoneError);
         });
 
         it("should throw error with message", () => {
@@ -138,7 +138,7 @@ describe("[None]", () => {
     describe("[unwrap]", () => {
         it("should throw error", () => {
             const behaviour = () => Option.none().unwrap();
-            expect(behaviour).toThrowError(EmptyOptionError);
+            expect(behaviour).toThrowError(UnwrapNoneError);
         });
     });
 
