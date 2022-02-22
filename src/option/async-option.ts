@@ -344,7 +344,7 @@ export class AsyncOption<T> {
      * iterator.next();
      * // done
      *
-     * AsyncOption.none(1).iter().then(iterator => iterator.next());
+     * AsyncOption.none().iter().then(iterator => iterator.next());
      * // resolves to done
      * ```
      * @since 0.1.0
@@ -383,7 +383,7 @@ export class AsyncOption<T> {
      * AsyncOption.none().mapOr(0, value => value + 1);
      * // returns AsyncOption.some(0)
      * ```
-     * @typeParam U Map tp option of this type
+     * @typeParam U Map to option of this type
      * @param or Use this value if option is empty
      * @param fn Call this with wrapped value if non-empty
      * @since 0.1.0
@@ -553,7 +553,6 @@ export class AsyncOption<T> {
      * // resolves to 0
      * ```
      * @typeParam U Type of default value
-     * @throws {@link EmptyOptionError}
      * @since 0.1.0
      */
     unwrapOr<U>(value: U): Promise<T | U> {

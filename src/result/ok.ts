@@ -1,8 +1,6 @@
 import { Option, OptionLike } from "../option";
 import { IsOk, OkSymbol, ResultLike } from "./result-like";
 
-export class ResultIsOkError extends Error {}
-
 export class Ok<T, E> implements ResultLike<T, E>, IsOk<T> {
     readonly [OkSymbol] = true;
     constructor(private readonly value: T) {}

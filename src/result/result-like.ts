@@ -1,5 +1,8 @@
 import { OptionLike } from "../option";
 
+export class EmptyResultError extends Error {}
+export class ResultIsOkError extends Error {}
+
 /**
  * `Result<T, E>` is the type used for returning and propagating errors.
  * The result is either `Ok`, representing success and containing a

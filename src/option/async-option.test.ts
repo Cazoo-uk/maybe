@@ -1,8 +1,7 @@
 import { Result } from "../result";
 import { AsyncOption } from "./async-option";
-import { EmptyOptionError } from "./none";
 import * as Option from "./option";
-import { OptionLike } from "./option-like";
+import { EmptyOptionError, OptionLike } from "./option-like";
 
 describe("[AsyncOption]", () => {
     describe("[and]", () => {

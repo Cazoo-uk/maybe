@@ -61,16 +61,6 @@ describe("[AsyncResult]", () => {
         });
     });
 
-    describe("[apply]", () => {
-        it("should be promise of callback value", () => {
-            const actual = AsyncResult.ok(1).apply(result =>
-                result.unwrap(),
-            );
-
-            return expect(actual).resolves.toEqual(1);
-        });
-    });
-
     describe("[asPromise]", () => {
         it("should be underlying promise", () => {
             const actual = AsyncResult.ok(1).asPromise();
@@ -266,7 +256,7 @@ describe("[AsyncResult]", () => {
         describe("when result of err", () => {
             it("should be promise of default value", () => {
                 const actual = AsyncResult.err(exampleError).mapOrElse(
-                    () => 0,
+                    error => (error === exampleError ? 0 : -1),
                     value => value + 1,
                 );
 

@@ -1,7 +1,11 @@
 import { Option, OptionLike } from "../option";
-import { IsErr, OkSymbol, ResultLike } from "./result-like";
 
-export class EmptyResultError extends Error {}
+import {
+    EmptyResultError,
+    IsErr,
+    OkSymbol,
+    ResultLike,
+} from "./result-like";
 
 export class Err<T, E> implements ResultLike<T, E>, IsErr<E> {
     readonly [OkSymbol] = false;
