@@ -1,5 +1,11 @@
 import { Option, OptionLike } from "../option";
-import { IsOk, OkSymbol, ResultLike } from "./result-like";
+
+import {
+    IsOk,
+    OkSymbol,
+    ResultIsOkError,
+    ResultLike,
+} from "./result-like";
 
 export class Ok<T, E> implements ResultLike<T, E>, IsOk<T> {
     readonly [OkSymbol] = true;

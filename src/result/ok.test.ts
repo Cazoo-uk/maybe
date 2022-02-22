@@ -1,6 +1,6 @@
 import { Option } from "../option";
-import { ResultIsOkError } from "./ok";
 import * as Result from "./result";
+import { ResultIsOkError } from "./result-like";
 
 describe("[Ok]", () => {
     describe("[and]", () => {
@@ -117,7 +117,7 @@ describe("[Ok]", () => {
 
     describe("[intoOkOrError]", () => {
         it("should be contained value", () => {
-            const actual = Result.ok(1).intoOk();
+            const actual = Result.ok(1).intoOkOrError();
             expect(actual).toEqual(1);
         });
     });

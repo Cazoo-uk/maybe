@@ -1,6 +1,6 @@
-import { EmptyResultError } from "./err";
 import * as Result from "./result";
 import { Option } from "../option";
+import { EmptyResultError } from "./result-like";
 
 describe("[Err]", () => {
     const exampleError = new Error("failure");

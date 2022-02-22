@@ -1,9 +1,12 @@
-import { AsyncResult } from "./async-result";
-import { EmptyResultError } from "./err";
-import { ResultIsOkError } from "./ok";
-import * as Result from "./result";
-import { ResultLike } from "./result-like";
 import { Option } from "../option";
+import { AsyncResult } from "./async-result";
+import * as Result from "./result";
+
+import {
+    EmptyResultError,
+    ResultIsOkError,
+    ResultLike,
+} from "./result-like";
 
 describe("[AsyncResult]", () => {
     const exampleError = new Error("failure");
