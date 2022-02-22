@@ -3,23 +3,23 @@ import { IsOk, OkSymbol, ResultLike } from "./result-like";
 
 export class ResultIsOkError extends Error {}
 
-export class Ok<A, E> implements ResultLike<A, E>, IsOk<A> {
+export class Ok<T, E> implements ResultLike<T, E>, IsOk<T> {
     readonly [OkSymbol] = true;
-    constructor(private readonly value: A) {}
+    constructor(private readonly value: T) {}
 
     and<B>(result: ResultLike<B, E>): ResultLike<B, E> {
         return result;
     }
 
-    andThen<B>(fn: (value: A) => ResultLike<B, E>): ResultLike<B, E> {
+    andThen<B>(fn: (value: T) => ResultLike<B, E>): ResultLike<B, E> {
         return fn(this.value);
     }
 
-    apply<T>(fn: (result: ResultLike<A, E>) => T): T {
+    apply<U>(fn: (result: ResultLike<T, E>) => U): U {
         return fn(this);
     }
 
-    contains(value: A): boolean {
+    contains(value: T): boolean {
         return this.value === value;
     }
 
@@ -31,12 +31,16 @@ export class Ok<A, E> implements ResultLike<A, E>, IsOk<A> {
         return Option.none();
     }
 
-    expect(): A {
+    expect(): T {
         return this.value;
     }
 
     expectErr(message: string): E {
         throw new ResultIsOkError(message);
+    }
+
+    intoOkOrError(): T | E {
+        return this.value;
     }
 
     isErr(): boolean {
@@ -47,39 +51,39 @@ export class Ok<A, E> implements ResultLike<A, E>, IsOk<A> {
         return true;
     }
 
-    iter(): IterableIterator<A> {
+    iter(): IterableIterator<T> {
         return [this.value][Symbol.iterator]();
     }
 
-    map<B>(fn: (value: A) => B): ResultLike<B, E> {
+    map<B>(fn: (value: T) => B): ResultLike<B, E> {
         return new Ok(fn(this.value));
     }
 
-    mapErr<F>(): ResultLike<A, F> {
-        return this as ResultLike<A, any>;
+    mapErr<F>(): ResultLike<T, F> {
+        return this as ResultLike<T, any>;
     }
 
-    mapOr<B>(_: B, fn: (value: A) => B): B {
+    mapOr<B>(_: B, fn: (value: T) => B): B {
         return fn(this.value);
     }
 
-    mapOrElse<B>(_: (error: E) => B, fn: (value: A) => B): B {
+    mapOrElse<B>(_: (error: E) => B, fn: (value: T) => B): B {
         return fn(this.value);
     }
 
-    ok(): OptionLike<A> {
+    ok(): OptionLike<T> {
         return Option.some(this.value);
     }
 
-    or<B>(): ResultLike<A | B, E> {
+    or<B>(): ResultLike<T | B, E> {
         return this;
     }
 
-    orElse<B>(): ResultLike<A | B, E> {
+    orElse<B>(): ResultLike<T | B, E> {
         return this;
     }
 
-    unwrap(): A {
+    unwrap(): T {
         return this.value;
     }
 
@@ -87,15 +91,15 @@ export class Ok<A, E> implements ResultLike<A, E>, IsOk<A> {
         throw new ResultIsOkError("unwrap error called on Ok");
     }
 
-    unwrapOr<B>(): A | B {
+    unwrapOr<B>(): T | B {
         return this.value;
     }
 
-    unwrapOrElse<B>(): A | B {
+    unwrapOrElse<B>(): T | B {
         return this.value;
     }
 
-    intoOk(): A {
+    intoOk(): T {
         return this.value;
     }
 }

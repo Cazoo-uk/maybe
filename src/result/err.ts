@@ -3,7 +3,7 @@ import { IsErr, OkSymbol, ResultLike } from "./result-like";
 
 export class EmptyResultError extends Error {}
 
-export class Err<A, E> implements ResultLike<A, E>, IsErr<E> {
+export class Err<T, E> implements ResultLike<T, E>, IsErr<E> {
     readonly [OkSymbol] = false;
     constructor(private readonly error: E) {}
 
@@ -15,7 +15,7 @@ export class Err<A, E> implements ResultLike<A, E>, IsErr<E> {
         return this as ResultLike<any, E>;
     }
 
-    apply<T>(fn: (result: ResultLike<A, E>) => T): T {
+    apply<U>(fn: (result: ResultLike<T, E>) => U): U {
         return fn(this);
     }
 
@@ -31,11 +31,15 @@ export class Err<A, E> implements ResultLike<A, E>, IsErr<E> {
         return Option.some(this.error);
     }
 
-    expect(message: string): A {
+    expect(message: string): T {
         throw new EmptyResultError(message);
     }
 
     expectErr(): E {
+        return this.error;
+    }
+
+    intoOkOrError(): T | E {
         return this.error;
     }
 
@@ -47,7 +51,7 @@ export class Err<A, E> implements ResultLike<A, E>, IsErr<E> {
         return false;
     }
 
-    iter(): IterableIterator<A> {
+    iter(): IterableIterator<T> {
         return [][Symbol.iterator]();
     }
 
@@ -55,7 +59,7 @@ export class Err<A, E> implements ResultLike<A, E>, IsErr<E> {
         return this as ResultLike<any, E>;
     }
 
-    mapErr<F>(fn: (error: E) => F): ResultLike<A, F> {
+    mapErr<F>(fn: (error: E) => F): ResultLike<T, F> {
         return new Err(fn(this.error));
     }
 
@@ -67,19 +71,19 @@ export class Err<A, E> implements ResultLike<A, E>, IsErr<E> {
         return or(this.error);
     }
 
-    ok(): OptionLike<A> {
+    ok(): OptionLike<T> {
         return Option.none();
     }
 
-    or<B>(result: ResultLike<B, E>): ResultLike<A | B, E> {
+    or<B>(result: ResultLike<B, E>): ResultLike<T | B, E> {
         return result;
     }
 
-    orElse<B>(fn: (error: E) => ResultLike<B, E>): ResultLike<A | B, E> {
+    orElse<B>(fn: (error: E) => ResultLike<B, E>): ResultLike<T | B, E> {
         return fn(this.error);
     }
 
-    unwrap(): A {
+    unwrap(): T {
         throw new EmptyResultError("unwrap called on Err");
     }
 
@@ -91,11 +95,11 @@ export class Err<A, E> implements ResultLike<A, E>, IsErr<E> {
         return this.error;
     }
 
-    unwrapOr<B>(or: B): A | B {
+    unwrapOr<B>(or: B): T | B {
         return or;
     }
 
-    unwrapOrElse<B>(fn: (error: E) => B): A | B {
+    unwrapOrElse<B>(fn: (error: E) => B): T | B {
         return fn(this.error);
     }
 }

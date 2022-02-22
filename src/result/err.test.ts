@@ -6,7 +6,7 @@ describe("[Err]", () => {
     const exampleError = new Error("failure");
 
     describe("[and]", () => {
-        it("should be original Result.error", () => {
+        it("should be original error", () => {
             const expected = Result.err(exampleError);
             const actual = expected.and(Result.ok(1));
             expect(actual).toEqual(expected);
@@ -14,7 +14,7 @@ describe("[Err]", () => {
     });
 
     describe("[andThen]", () => {
-        it("should be original Result.error", () => {
+        it("should be original error", () => {
             const expected = Result.err(exampleError);
             const actual = expected.andThen(() => Result.ok(1));
             expect(actual).toEqual(expected);
@@ -78,21 +78,14 @@ describe("[Err]", () => {
         });
     });
 
-    describe("[Result.err]", () => {
-        it("should be option of Result.error", () => {
-            const actual = Result.err(exampleError).err();
-            expect(actual).toEqual(Option.some(exampleError));
-        });
-    });
-
     describe("[expect]", () => {
-        it("should throw appropriate Result.error type", () => {
+        it("should throw appropriate error type", () => {
             const behaviour = () =>
                 Result.err(exampleError).expect("message");
             expect(behaviour).toThrowError(EmptyResultError);
         });
 
-        it("should throw Result.error with message", () => {
+        it("should throw error with message", () => {
             const behaviour = () =>
                 Result.err(exampleError).expect("message");
             expect(behaviour).toThrowError("message");
@@ -100,15 +93,22 @@ describe("[Err]", () => {
     });
 
     describe("[expectErr]", () => {
-        it("should be contained Result.error", () => {
+        it("should be contained error", () => {
             const actual = Result.err(exampleError).expectErr("message");
             expect(actual).toBe(exampleError);
         });
     });
 
     describe("[intoErr]", () => {
-        it("should be contained Result.error", () => {
+        it("should be contained error", () => {
             const actual = Result.err(exampleError).intoErr();
+            expect(actual).toBe(exampleError);
+        });
+    });
+
+    describe("[intoOkOrErr]", () => {
+        it("should be contained error", () => {
+            const actual = Result.err(exampleError).intoOkOrError();
             expect(actual).toBe(exampleError);
         });
     });
@@ -196,14 +196,14 @@ describe("[Err]", () => {
     });
 
     describe("[unwrap]", () => {
-        it("should throw appropriate Result.error type", () => {
+        it("should throw appropriate error type", () => {
             const behaviour = () => Result.err(exampleError).unwrap();
             expect(behaviour).toThrowError(EmptyResultError);
         });
     });
 
     describe("[unwrapErr]", () => {
-        it("should be contained Result.error", () => {
+        it("should be contained error", () => {
             const actual = Result.err(exampleError).unwrapErr();
             expect(actual).toBe(exampleError);
         });

@@ -2,8 +2,8 @@ import { AsyncOption } from "../option";
 import * as Result from "./result";
 import { ResultLike } from "./result-like";
 
-export class AsyncResult<A, E> {
-    constructor(private readonly promise: Promise<ResultLike<A, E>>) {}
+export class AsyncResult<T, E> {
+    constructor(private readonly promise: Promise<ResultLike<T, E>>) {}
 
     static fromPromise<T, E>(
         result: Promise<ResultLike<T, E>>,
@@ -11,6 +11,19 @@ export class AsyncResult<A, E> {
         return new AsyncResult(result);
     }
 
+    /**
+     * Convert a synchronous result ({@link ResultLike}) into an
+     * {@link AsyncResult}.
+     *
+     * ```typescript
+     * const result = Result.ok(1);
+     * AsyncResult.fromResult(result);
+     * ```
+     * @typeParam T Type of ok value
+     * @typeParam E Type of err value
+     * @param result Result to be converted
+     * @since 0.1.0
+     */
     static fromResult<T, E>(result: ResultLike<T, E>): AsyncResult<T, E> {
         return this.fromPromise(Promise.resolve(result));
     }
@@ -23,11 +36,11 @@ export class AsyncResult<A, E> {
         return this.fromResult(Result.err(error));
     }
 
-    and<B>(result: AsyncResult<B, E>): AsyncResult<B, E> {
+    and<U>(result: AsyncResult<U, E>): AsyncResult<U, E> {
         return this.unwrapAnd(result, (a, b) => a.and(b));
     }
 
-    andThen<B>(fn: (value: A) => AsyncResult<B, E>): AsyncResult<B, E> {
+    andThen<U>(fn: (value: T) => AsyncResult<U, E>): AsyncResult<U, E> {
         return new AsyncResult(
             this.promise.then(result =>
                 result.isOk()
@@ -37,15 +50,15 @@ export class AsyncResult<A, E> {
         );
     }
 
-    apply<T>(fn: (result: ResultLike<A, E>) => T): Promise<T> {
+    apply<U>(fn: (result: ResultLike<T, E>) => U): Promise<U> {
         return this.promise.then(result => result.apply(fn));
     }
 
-    asPromise(): Promise<ResultLike<A, E>> {
+    asPromise(): Promise<ResultLike<T, E>> {
         return this.promise;
     }
 
-    contains(value: A): Promise<boolean> {
+    contains(value: T): Promise<boolean> {
         return this.promise.then(result => result.contains(value));
     }
 
@@ -59,7 +72,7 @@ export class AsyncResult<A, E> {
         );
     }
 
-    expect(message: string): Promise<A> {
+    expect(message: string): Promise<T> {
         return this.promise.then(result => result.expect(message));
     }
 
@@ -75,42 +88,42 @@ export class AsyncResult<A, E> {
         return this.promise.then(result => result.isOk());
     }
 
-    iter(): Promise<IterableIterator<A>> {
+    iter(): Promise<IterableIterator<T>> {
         return this.promise.then(result => result.iter());
     }
 
-    map<B>(fn: (value: A) => B): AsyncResult<B, E> {
+    map<U>(fn: (value: T) => U): AsyncResult<U, E> {
         return new AsyncResult(
             this.promise.then(result => result.map(fn)),
         );
     }
 
-    mapErr<B>(fn: (error: E) => B): AsyncResult<A, B> {
+    mapErr<U>(fn: (error: E) => U): AsyncResult<T, U> {
         return new AsyncResult(
             this.promise.then(result => result.mapErr(fn)),
         );
     }
 
-    mapOr<B>(or: B, fn: (value: A) => B): Promise<B> {
+    mapOr<U>(or: U, fn: (value: T) => U): Promise<U> {
         return this.promise.then(result => result.mapOr(or, fn));
     }
 
-    mapOrElse<B>(or: () => B, fn: (value: A) => B): Promise<B> {
+    mapOrElse<U>(or: () => U, fn: (value: T) => U): Promise<U> {
         return this.promise.then(result => result.mapOrElse(or, fn));
     }
 
-    ok(): AsyncOption<A> {
+    ok(): AsyncOption<T> {
         return AsyncOption.fromPromise(
             this.promise.then(result => result.ok()),
         );
     }
 
-    or<B>(result: AsyncResult<B, E>): AsyncResult<A | B, E> {
+    or<U>(result: AsyncResult<U, E>): AsyncResult<T | U, E> {
         return this.unwrapAnd(result, (a, b) => a.or(b));
     }
 
-    orElse<B>(fn: () => AsyncResult<B, E>): AsyncResult<A | B, E> {
-        const promise = this.promise.then<ResultLike<A | B, E>>(
+    orElse<U>(fn: () => AsyncResult<U, E>): AsyncResult<T | U, E> {
+        const promise = this.promise.then<ResultLike<T | U, E>>(
             result => {
                 return result.isOk() ? result : fn().asPromise();
             },
@@ -119,13 +132,13 @@ export class AsyncResult<A, E> {
         return new AsyncResult(promise);
     }
 
-    transform<B, F>(
-        fn: (result: ResultLike<A, E>) => ResultLike<B, F>,
-    ): AsyncResult<B, F> {
+    transform<U, F>(
+        fn: (result: ResultLike<T, E>) => ResultLike<U, F>,
+    ): AsyncResult<U, F> {
         return new AsyncResult(this.promise.then(fn));
     }
 
-    unwrap(): Promise<A> {
+    unwrap(): Promise<T> {
         return this.promise.then(result => result.unwrap());
     }
 
@@ -133,21 +146,21 @@ export class AsyncResult<A, E> {
         return this.promise.then(result => result.unwrapErr());
     }
 
-    unwrapOr<B>(value: B): Promise<A | B> {
+    unwrapOr<U>(value: U): Promise<T | U> {
         return this.promise.then(result => result.unwrapOr(value));
     }
 
-    unwrapOrElse<B>(fn: () => B): Promise<A | B> {
+    unwrapOrElse<U>(fn: () => U): Promise<T | U> {
         return this.promise.then(result => result.unwrapOrElse(fn));
     }
 
-    private unwrapAnd<B, T>(
-        other: AsyncResult<B, E>,
+    private unwrapAnd<U, C>(
+        other: AsyncResult<U, E>,
         fn: (
-            a: ResultLike<A, E>,
-            b: ResultLike<B, E>,
-        ) => ResultLike<T, E>,
-    ): AsyncResult<T, E> {
+            a: ResultLike<T, E>,
+            b: ResultLike<U, E>,
+        ) => ResultLike<C, E>,
+    ): AsyncResult<C, E> {
         return new AsyncResult(
             this.promise.then(result =>
                 other

@@ -4,9 +4,9 @@ import { IsNone, IsSome, OptionLike } from "./option-like";
 import { Some } from "./some";
 
 /**
- * A utility type which represents an option that must be *either* Some
- * or None. This contrasts with `OptionLike`, which is *neither* Some or
- * None as far as the compiler is concerned!
+ * A utility type which represents an option that must be *either* `Some`
+ * or `None`. This contrasts with `OptionLike`, which is *neither* `Some`
+ * or `None` as far as the compiler is concerned!
  *
  * This type makes {@link OptionLike.isSome} and {@link OptionLike.isNone}
  * more powerful in some situations. For example:
@@ -102,7 +102,7 @@ export const from = <T>(value: T | null | undefined): OptionLike<T> => {
  *
  * Implementation note: an option is defined as an instance of `Some` or
  * `None`. These private classes both implement {@link OptionLike}. For
- * avoidance of doubt, Some and None are not exposed by this package.
+ * avoidance of doubt, `Some` and `None` are not exposed by this package.
  *
  * `isOption` will infer the wrapped type if possible. Note that this
  * provides no runtime guarantee that the option is of type `T`.
@@ -111,7 +111,7 @@ export const from = <T>(value: T | null | undefined): OptionLike<T> => {
  * Option.isOption(Option.some(1));
  * // returns true
  *
- * Option.isOption(Option.none(1));
+ * Option.isOption(Option.none());
  * // returns true
  *
  * Option.isOption(1);
@@ -173,7 +173,7 @@ export const some = <T>(value: T): OptionLike<T> & IsSome<T> => {
  * // returns Result.err("error")
  * ```
  * @typeParam E Type of error value
- * @typeParam T Type of success value
+ * @typeParam T Type of ok value
  * @param option Option to be transposed
  * @since 0.1.0
  */

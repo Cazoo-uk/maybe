@@ -115,6 +115,13 @@ describe("[Ok]", () => {
         });
     });
 
+    describe("[intoOkOrError]", () => {
+        it("should be contained value", () => {
+            const actual = Result.ok(1).intoOk();
+            expect(actual).toEqual(1);
+        });
+    });
+
     describe("[isErr]", () => {
         it("should be false", () => {
             const actual = Result.ok(1).isErr();

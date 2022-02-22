@@ -2,6 +2,24 @@ import { Option } from "../option";
 import * as Result from "./result";
 
 describe("[Result]", () => {
+    describe("[isResult]", () => {
+        describe("when item is result", () => {
+            const cases = [Result.ok(1), Result.err(1)];
+
+            it.each(cases)("should be true", result => {
+                expect(Result.isResult(result)).toBe(true);
+            });
+        });
+
+        describe("when item is not result", () => {
+            const cases = [1, "hello"];
+
+            it.each(cases)("should be false", item => {
+                expect(Result.isResult(item)).toBe(false);
+            });
+        });
+    });
+
     describe("[flatten]", () => {
         it("should flatten result nested once", () => {
             const actual = Result.flatten(Result.ok(Result.ok(1)));
@@ -26,22 +44,6 @@ describe("[Result]", () => {
             );
 
             expect(actual).toEqual(Result.ok(Result.ok(1)));
-        });
-    });
-
-    describe("[intoOkOrError]", () => {
-        describe("when ok", () => {
-            it("should be contained value", () => {
-                const actual = Result.intoOkOrError(Result.ok(1));
-                expect(actual).toEqual(1);
-            });
-        });
-
-        describe("when error", () => {
-            it("should be error", () => {
-                const actual = Result.intoOkOrError(Result.err(1));
-                expect(actual).toEqual(1);
-            });
         });
     });
 

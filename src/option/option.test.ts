@@ -22,7 +22,7 @@ describe("[Option]", () => {
             const cases = [Option.some(1), Option.none()];
 
             it.each(cases)("should be true for %o", actual => {
-                expect(actual).toBe(true);
+                expect(Option.isOption(actual)).toBe(true);
             });
         });
 
@@ -30,7 +30,7 @@ describe("[Option]", () => {
             const cases = [null, undefined, 1, "hello", { a: 1 }];
 
             it.each(cases)("should be false for %s", actual => {
-                expect(actual).toBe(false);
+                expect(Option.isOption(actual)).toBe(false);
             });
         });
     });

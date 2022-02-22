@@ -27,10 +27,11 @@ import { OptionLike } from "../option";
  * - unwrap_or_default (no defaults in JS)
  *
  * Differences compared to Rust implementation:
- * - {@link or} (other option need not be of same type)
- * - {@link orElse} (other option need not be of same type)
- * - {@link unwrapOr} (other option need not be of same type)
- * - {@link unwrapOrElse} (other option need not be of same type)
+ * - {@link intoOkOrError} (`T` and `E` need not match)
+ * - {@link or} (other result need not be of same type)
+ * - {@link orElse} (other result need not be of same type)
+ * - {@link unwrapOr} (other result need not be of same type)
+ * - {@link unwrapOrElse} (other result need not be of same type)
  *
  * Extensions from Rust implementation:
  * - {@link apply} (added to facilitate type constraints)
@@ -84,20 +85,20 @@ export interface ResultLike<T, E> {
      * certain type constraints.
      *
      * ```typescript
-     * Option.some(Option.some(1)).apply(Option.flatten);
-     * // returns Option.some(1)
+     * Result.ok(Result.ok(1)).apply(Option.flatten);
+     * // returns Result.ok(1)
      *
-     * Option.some(1).apply(Option.flatten);
-     * // compile error! Option<number> is not an option of an option
+     * Result.ok(1).apply(Option.flatten);
+     * // compile error! Result<number, unknown> is not a result of a result
      * ```
-     * @param fn Passes the option to this callback
+     * @param fn Passes the result to this callback
      * @typeParam U Return type of `fn`
      * @since 0.1.0
      */
     apply<U>(fn: (value: ResultLike<T, E>) => U): U;
 
     /**
-     * Returns true if the option is `Ok` and contains the given value.
+     * Returns true if the result is `Ok` and contains the given value.
      * Compares using strict equality.
      *
      * ```typescript
@@ -118,7 +119,7 @@ export interface ResultLike<T, E> {
     contains(value: T): boolean;
 
     /**
-     * Returns true if the option is `Err` and contains an error that the
+     * Returns true if the result is `Err` and contains an error that the
      * matches the given value. Compares using strict equality.
      *
      * ```typescript
@@ -162,7 +163,7 @@ export interface ResultLike<T, E> {
      * As this function can throw an error, it's use is generally
      * discouraged outside of tests. It's always preferable to:
      * - use one of {@link unwrapOr} and {@link unwrapOrElse}
-     * - narrow the option type using {@link isOk} in tandem with
+     * - narrow the result type using {@link isOk} in tandem with
      * {@link IsOk.intoOk}
      *
      * ```typescript
@@ -185,7 +186,7 @@ export interface ResultLike<T, E> {
      *
      * As this function can throw an error, it's use is generally
      * discouraged outside of tests. It's always preferable to narrow the
-     * option type using {@link isErr} in tandem with
+     * result type using {@link isErr} in tandem with
      * {@link IsErr.intoErr}.
      *
      * ```typescript
@@ -202,7 +203,26 @@ export interface ResultLike<T, E> {
     expectErr(message: string): E;
 
     /**
-     * Returns true if the option is an `Err` value. This function acts
+     * Returns the wrapped value, no matter whether the result is `Ok` or
+     * `Err`.
+     *
+     * Unlike the Rust implementation, the ok and error types need not be
+     * the same.
+     *
+     * ```typescript
+     * Result.ok(1).intoOkOrError()
+     * // returns 1
+     *
+     * Result.err(someError).intoOkOrError()
+     * // returns someError
+     * ```
+     * @todo To implement!
+     * @since 0.1.0
+     */
+    intoOkOrError(): T | E;
+
+    /**
+     * Returns true if the result is an `Err` value. This function acts
      * as a type predicate.
      *
      * ```typescript
@@ -224,7 +244,7 @@ export interface ResultLike<T, E> {
     isErr(): this is IsErr<E>;
 
     /**
-     * Returns true if the option is an `Some` value. This function acts
+     * Returns true if the result is an `Some` value. This function acts
      * as a type predicate.
      *
      * ```typescript
@@ -247,7 +267,7 @@ export interface ResultLike<T, E> {
 
     /**
      * Returns an iterator over the possible value within. The iterator
-     * contains one item if the option is `Ok`, or none if `Err`.
+     * contains one item if the result is `Ok`, or none if `Err`.
      *
      * ```typescript
      * const iterator = Result.ok(1).iter()
@@ -306,7 +326,7 @@ export interface ResultLike<T, E> {
      * Result.ok(1).mapErr(value => value + 1);
      * // returns Result.err(someError)
      * ```
-     * @typeParam U Map to result of this error type
+     * @typeParam F Map to result of this error type
      * @param fn Call this with wrapped error
      * @since 0.1.0
      */
@@ -320,7 +340,7 @@ export interface ResultLike<T, E> {
      * passing the result of a function call, it is recommended to use
      * {@link mapOrElse}, which is lazily evaluated.
      *
-     * The provided function `fn` is called if and only if the option is
+     * The provided function `fn` is called if and only if the result is
      * non-empty.
      *
      * ```typescript
@@ -346,7 +366,7 @@ export interface ResultLike<T, E> {
      *
      * The function `fn` is called if and only if the result is an
      * instance of `Ok`. The function `or` is only called if the
-     * option *is* empty.
+     * result *is* empty.
      *
      * ```typescript
      * Result.ok(1).mapOrElse(() => 0, value => value + 1);
@@ -382,7 +402,7 @@ export interface ResultLike<T, E> {
     ok(): OptionLike<T>;
 
     /**
-     * Returns this result if it is `Ok`, otherwise returns `option`.
+     * Returns this result if it is `Ok`, otherwise returns `result`.
      *
      * Arguments passed to `or` are eagerly evaluated; if you are passing
      * the result of a function call, it is recommended to use
@@ -396,7 +416,7 @@ export interface ResultLike<T, E> {
      * // returns Result.ok(2)
      * ```
      * @typeParam U Ok type of other result
-     * @param result Return this if this option is `Err`
+     * @param result Return this if this result is `Err`
      * @since 0.1.0
      */
     or<U>(result: ResultLike<U, E>): ResultLike<T | U, E>;
@@ -427,7 +447,7 @@ export interface ResultLike<T, E> {
      * As this function can throw an error, it's use is generally
      * discouraged outside of tests. It's always preferable to:
      * - use one of {@link unwrapOr} and {@link unwrapOrElse}
-     * - narrow the option type using {@link isOk} in tandem with
+     * - narrow the result type using {@link isOk} in tandem with
      * {@link IsOk.intoOk}
      *
      * ```typescript
@@ -450,7 +470,7 @@ export interface ResultLike<T, E> {
      *
      * As this function can throw an error, it's use is generally
      * discouraged outside of tests. It's always preferable to narrow the
-     * option type using {@link isErr} in tandem with
+     * result type using {@link isErr} in tandem with
      * {@link IsErr.intoErr}.
      *
      * ```typescript
