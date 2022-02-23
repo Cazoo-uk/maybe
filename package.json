@@ -1,7 +1,7 @@
 {
     "name": "@cazoo/maybe",
     "main": "lib/index.js",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Template for creating Typescript OSS packages",
     "scripts": {
         "build": "tsc",
