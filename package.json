@@ -2,7 +2,7 @@
     "name": "@cazoo/maybe",
     "main": "lib/index.js",
     "version": "0.1.1",
-    "description": "Template for creating Typescript OSS packages",
+    "description": "Utility types for handling uncertain values",
     "scripts": {
         "build": "tsc",
         "test": "jest",
