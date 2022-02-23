@@ -125,7 +125,6 @@ function parseAndDouble(n: Option<string>): Option<number> {
 ### What are asynchronous options and results?
 Promises make it a pain to work with the synchronous
 option and result types. For example:
-
 ```typescript
 // generate a promise of a result 
 const result: Promise<Result<T, E>> = someResult();
@@ -136,17 +135,37 @@ const next = (await result).then(data => someOtherResult(data));
 // and again...
 (await next).then(data => someFurtherResult(data));
 ```
-
 Asynchronous options and results use promises internally
 to abstract away this complexity. This allows you to write 
 more concise code. The `await` calls above are no longer 
 required.
-
 ```typescript
 someResult() // returns AsyncResult<T, E>
     .then(someOtherResult)
     .then(someFurtherResult)
 ```
-# Contributing
+## Contributing
+Contributions are very welcome! To contribute, first set up
+the repository. There are instructions for this below.
 
-TODO
+Open a branch and make whatever your changes. When you're 
+ready, open a pull request for us to review!
+
+When contributing, make sure that any additions are covered
+by unit tests. If you add or modify code, please ensure that
+you update the documentation to match your changes.
+
+### Setting up the code
+First clone the repository:
+```
+$ git clone git@github.com:Cazoo-uk/maybe.git
+```
+Install dependencies:
+```
+$ cd path/to/maybe
+$ npm install
+```
+### Running tests
+```
+$ npm test
+```
