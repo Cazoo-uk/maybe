@@ -1,6 +1,5 @@
 import { AsyncResult } from "../result";
-import * as Option from "./option";
-import { OptionLike } from "./option-like";
+import { Option } from "./option";
 
 /**
  * Type `AsyncOption` represents an optional value that will be the
@@ -8,11 +7,11 @@ import { OptionLike } from "./option-like";
  * where that value isn't yet known.
  *
  * `AsyncOption` is not represented by `Some` and `None` in the same way
- * as {@link OptionLike}. We can't know which it is: as the wrapped value
+ * as {@link Option}. We can't know which it is: as the wrapped value
  * is the result of a promise, we don't know whether it will be there or
  * not when the `AsyncOption` is created.
  *
- * `AsyncOption` is more ergonomic than {@link OptionLike} whenever a
+ * `AsyncOption` is more ergonomic than {@link Option} whenever a
  * promise is involved. See this (slightly contrived) example:
  *
  * ```typescript
@@ -59,14 +58,14 @@ import { OptionLike } from "./option-like";
  * {@link AsyncResult} in this situation. It nonetheless shows how
  * `AsyncOption` can make asynchronous code more concise!
  *
- * `AsyncOption` exposes a very similar interface to {@link OptionLike}.
+ * `AsyncOption` exposes a very similar interface to {@link Option}.
  * The key difference is that every `AsyncOption` method is async in some
- * way. If {@link OptionLike} returns a plain value, `AsyncOption` will
- * return a promise of a plain value. If an {@link OptionLike} method
+ * way. If {@link Option} returns a plain value, `AsyncOption` will
+ * return a promise of a plain value. If an {@link Option} method
  * wants another option. `AsyncOption` will want another async option.
  *
  * There is another small difference: the async version does not
- * implement {@link OptionLike.apply} but rather exposes a method called
+ * implement {@link Option.apply} but rather exposes a method called
  * {@link AsyncOption.transform}.
  *
  * It's prudent to assume that most async operations have a chance of
@@ -79,10 +78,10 @@ import { OptionLike } from "./option-like";
  * ergonomic way
  */
 export class AsyncOption<T> {
-    constructor(private readonly promise: Promise<OptionLike<T>>) {}
+    constructor(private readonly promise: Promise<Option<T>>) {}
 
     /**
-     * Convert a synchronous option ({@link OptionLike}) into an
+     * Convert a synchronous option ({@link Option}) into an
      * {@link AsyncOption}.
      *
      * ```typescript
@@ -93,12 +92,12 @@ export class AsyncOption<T> {
      * @param option Option to be converted
      * @since 0.1.0
      */
-    static fromOption<T>(option: OptionLike<T>): AsyncOption<T> {
+    static fromOption<T>(option: Option<T>): AsyncOption<T> {
         return this.fromPromise(Promise.resolve(option));
     }
 
     /**
-     * Convert a promise of a synchronous option ({@link OptionLike})
+     * Convert a promise of a synchronous option ({@link Option})
      * into an {@link AsyncOption}.
      *
      * ```typescript
@@ -109,9 +108,7 @@ export class AsyncOption<T> {
      * @param promise Promise of option to be convert
      * @since 0.1.0
      */
-    static fromPromise<T>(
-        promise: Promise<OptionLike<T>>,
-    ): AsyncOption<T> {
+    static fromPromise<T>(promise: Promise<Option<T>>): AsyncOption<T> {
         return new AsyncOption(promise);
     }
 
@@ -144,7 +141,7 @@ export class AsyncOption<T> {
     }
 
     /**
-     * Like {@link OptionLike.and} but accepts and returns an async
+     *  {@link Option.and} but accepts and returns an async
      * option instead.
      *
      * ```typescript
@@ -164,7 +161,7 @@ export class AsyncOption<T> {
     }
 
     /**
-     * Like {@link OptionLike.andThen} but:
+     *  {@link Option.andThen} but:
      * - accepts a callback that returns an {@link AsyncOption}
      * - also returns an {@link AsyncOption}
      *
@@ -203,12 +200,12 @@ export class AsyncOption<T> {
      * @todo Should we expose this method at all?
      * @since 0.1.0
      */
-    asPromise(): Promise<OptionLike<T>> {
+    asPromise(): Promise<Option<T>> {
         return this.promise;
     }
 
     /**
-     * Like {@link OptionLike.contains} but returns a promise of a
+     *  {@link Option.contains} but returns a promise of a
      * boolean, rather than a boolean.
      *
      * ```typescript
@@ -226,7 +223,7 @@ export class AsyncOption<T> {
     }
 
     /**
-     * Like {@link OptionLike.expect} but returns a promise. If `Some`,
+     *  {@link Option.expect} but returns a promise. If `Some`,
      * the promise resolves with the wrapped value, else it rejects with
      * an error.
      *
@@ -245,7 +242,7 @@ export class AsyncOption<T> {
     }
 
     /**
-     * Like {@link OptionLike.filter} but returns an async option.
+     *  {@link Option.filter} but returns an async option.
      *
      * ```typescript
      * AsyncOption.some(1).filter(value => value === 1);
@@ -272,7 +269,7 @@ export class AsyncOption<T> {
     filter<U extends T>(fn: (value: T) => value is U): AsyncOption<U>;
 
     /**
-     * Like {@link OptionLike.filter} but returns an async option.
+     *  {@link Option.filter} but returns an async option.
      *
      * ```typescript
      * AsyncOption.some(1).filter(value => value === 1);
@@ -296,7 +293,7 @@ export class AsyncOption<T> {
     }
 
     /**
-     * Like {@link OptionLike.isNone} but returns a promise of a boolean.
+     *  {@link Option.isNone} but returns a promise of a boolean.
      * This function cannot be used to for type narrowing because this is
      * not possible with asynchronous code.
      *
@@ -314,7 +311,7 @@ export class AsyncOption<T> {
     }
 
     /**
-     * Like {@link OptionLike.isSome} but returns a promise of a boolean.
+     *  {@link Option.isSome} but returns a promise of a boolean.
      * This function cannot be used to for type narrowing because this is
      * not possible with asynchronous code.
      *
@@ -332,7 +329,7 @@ export class AsyncOption<T> {
     }
 
     /**
-     * Like {@link OptionLike.iter} but returns a promise of an
+     *  {@link Option.iter} but returns a promise of an
      * iterator.
      *
      * ```typescript
@@ -354,7 +351,7 @@ export class AsyncOption<T> {
     }
 
     /**
-     * Like {@link OptionLike.map} but returns an async option.
+     *  {@link Option.map} but returns an async option.
      *
      * ```typescript
      * AsyncOption.some(1).map(value => value + 1);
@@ -374,7 +371,7 @@ export class AsyncOption<T> {
     }
 
     /**
-     * Like {@link OptionLike.mapOr} but returns an async option.
+     *  {@link Option.mapOr} but returns an async option.
      *
      * ```typescript
      * AsyncOption.some(1).mapOr(0, value => value + 1);
@@ -395,7 +392,7 @@ export class AsyncOption<T> {
     }
 
     /**
-     * Like {@link OptionLike.mapOrElse} but returns an async option.
+     *  {@link Option.mapOrElse} but returns an async option.
      *
      * ```typescript
      * AsyncOption.some(1).mapOrElse(() => 0, value => value + 1);
@@ -416,7 +413,7 @@ export class AsyncOption<T> {
     }
 
     /**
-     * Like {@link OptionLike.okOr} but returns an {@link AsyncResult}.
+     *  {@link Option.okOr} but returns an {@link AsyncResult}.
      *
      * ```typescript
      * const error = new Error("failure");
@@ -438,7 +435,7 @@ export class AsyncOption<T> {
     }
 
     /**
-     * Like {@link OptionLike.okOrElse} but returns an {@link AsyncResult}.
+     *  {@link Option.okOrElse} but returns an {@link AsyncResult}.
      *
      * ```typescript
      * const error = new Error("failure");
@@ -460,7 +457,7 @@ export class AsyncOption<T> {
     }
 
     /**
-     * Like {@link OptionLike.or} but accepts an async option and also
+     *  {@link Option.or} but accepts an async option and also
      * returns an async option.
      *
      * ```typescript
@@ -479,7 +476,7 @@ export class AsyncOption<T> {
     }
 
     /**
-     * Like {@link OptionLike.orElse} but:
+     *  {@link Option.orElse} but:
      * - accepts a function that returns an async option
      * - itself returns an async option.
      *
@@ -496,7 +493,7 @@ export class AsyncOption<T> {
      */
     orElse<U>(fn: () => AsyncOption<U>): AsyncOption<T | U> {
         return new AsyncOption(
-            this.promise.then<OptionLike<T | U>>(option =>
+            this.promise.then<Option<T | U>>(option =>
                 option.isSome() ? option : fn().asPromise(),
             ),
         );
@@ -504,7 +501,7 @@ export class AsyncOption<T> {
 
     /**
      * Call the provided function with a synchronous version of this
-     * option. This fulfils the same role as {@link OptionLike.apply}, in
+     * option. This fulfils the same role as {@link Option.apply}, in
      * that it can be used to apply a function to this option.
      *
      * ```typescript
@@ -516,14 +513,12 @@ export class AsyncOption<T> {
      * @param fn Call this the inner option
      * @since 0.1.0
      */
-    transform<U>(
-        fn: (value: OptionLike<T>) => OptionLike<U>,
-    ): AsyncOption<U> {
+    transform<U>(fn: (value: Option<T>) => Option<U>): AsyncOption<U> {
         return new AsyncOption(this.promise.then(fn));
     }
 
     /**
-     * Like {@link OptionLike.unwrap} but returns a promise. If `Some`,
+     *  {@link Option.unwrap} but returns a promise. If `Some`,
      * the promise resolves with the wrapped value, else it rejects with
      * an error.
      *
@@ -542,7 +537,7 @@ export class AsyncOption<T> {
     }
 
     /**
-     * Like {@link OptionLike.unwrapOr} but returns a promise. The promise
+     *  {@link Option.unwrapOr} but returns a promise. The promise
      * resolves with the wrapped value or the default.
      *
      * ```typescript
@@ -560,7 +555,7 @@ export class AsyncOption<T> {
     }
 
     /**
-     * Like {@link OptionLike.unwrapOrElse} but returns a promise. The
+     *  {@link Option.unwrapOrElse} but returns a promise. The
      * promise resolves with the wrapped value or the result of the
      * callback.
      *
@@ -580,7 +575,7 @@ export class AsyncOption<T> {
     }
 
     /**
-     * Like {@link OptionLike.xor} but accepts an async option and also
+     *  {@link Option.xor} but accepts an async option and also
      * returns an async option.
      *
      * ```typescript
@@ -605,7 +600,7 @@ export class AsyncOption<T> {
     }
 
     /**
-     * Like {@link OptionLike.zip} but accepts an async option and also
+     *  {@link Option.zip} but accepts an async option and also
      * returns an async option.
      *
      * ```typescript
@@ -624,7 +619,7 @@ export class AsyncOption<T> {
     }
 
     /**
-     * Like {@link OptionLike.zipWith} but accepts an async option and
+     *  {@link Option.zipWith} but accepts an async option and
      * also returns an async option.
      *
      * ```typescript
@@ -648,7 +643,7 @@ export class AsyncOption<T> {
 
     private unwrapAnd<U, C>(
         other: AsyncOption<U>,
-        fn: (a: OptionLike<T>, b: OptionLike<U>) => OptionLike<C>,
+        fn: (a: Option<T>, b: Option<U>) => Option<C>,
     ): AsyncOption<C> {
         return new AsyncOption(
             this.promise.then(option =>

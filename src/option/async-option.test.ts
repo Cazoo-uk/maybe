@@ -1,7 +1,6 @@
 import { Result } from "../result";
 import { AsyncOption } from "./async-option";
-import * as Option from "./option";
-import { UnwrapNoneError, OptionLike } from "./option-like";
+import { Option, UnwrapNoneError } from "./option";
 
 describe("[AsyncOption]", () => {
     describe("[and]", () => {
@@ -261,7 +260,7 @@ describe("[AsyncOption]", () => {
         });
 
         describe("when first option is none", () => {
-            const cases: [AsyncOption<number>, OptionLike<number>][] = [
+            const cases: [AsyncOption<number>, Option<number>][] = [
                 [AsyncOption.some(2), Option.some(2)],
                 [AsyncOption.none(), Option.none()],
             ];

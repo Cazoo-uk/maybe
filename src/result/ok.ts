@@ -1,20 +1,19 @@
-import { Option, OptionLike } from "../option";
+import { Option } from "../option";
+import { IsOk, OkSymbol, UnwrapOkError, Result } from "./result";
 
-import { IsOk, OkSymbol, UnwrapOkError, ResultLike } from "./result-like";
-
-export class Ok<T, E> implements ResultLike<T, E>, IsOk<T> {
+export class Ok<T, E> implements Result<T, E>, IsOk<T> {
     readonly [OkSymbol] = true;
     constructor(private readonly value: T) {}
 
-    and<B>(result: ResultLike<B, E>): ResultLike<B, E> {
+    and<B>(result: Result<B, E>): Result<B, E> {
         return result;
     }
 
-    andThen<B>(fn: (value: T) => ResultLike<B, E>): ResultLike<B, E> {
+    andThen<B>(fn: (value: T) => Result<B, E>): Result<B, E> {
         return fn(this.value);
     }
 
-    apply<U>(fn: (result: ResultLike<T, E>) => U): U {
+    apply<U>(fn: (result: Result<T, E>) => U): U {
         return fn(this);
     }
 
@@ -26,7 +25,7 @@ export class Ok<T, E> implements ResultLike<T, E>, IsOk<T> {
         return false;
     }
 
-    err(): OptionLike<E> {
+    err(): Option<E> {
         return Option.none();
     }
 
@@ -54,12 +53,12 @@ export class Ok<T, E> implements ResultLike<T, E>, IsOk<T> {
         return [this.value][Symbol.iterator]();
     }
 
-    map<B>(fn: (value: T) => B): ResultLike<B, E> {
+    map<B>(fn: (value: T) => B): Result<B, E> {
         return new Ok(fn(this.value));
     }
 
-    mapErr<F>(): ResultLike<T, F> {
-        return this as ResultLike<T, any>;
+    mapErr<F>(): Result<T, F> {
+        return this as Result<T, any>;
     }
 
     mapOr<B>(_: B, fn: (value: T) => B): B {
@@ -70,15 +69,15 @@ export class Ok<T, E> implements ResultLike<T, E>, IsOk<T> {
         return fn(this.value);
     }
 
-    ok(): OptionLike<T> {
+    ok(): Option<T> {
         return Option.some(this.value);
     }
 
-    or<B>(): ResultLike<T | B, E> {
+    or<B>(): Result<T | B, E> {
         return this;
     }
 
-    orElse<B>(): ResultLike<T | B, E> {
+    orElse<B>(): Result<T | B, E> {
         return this;
     }
 

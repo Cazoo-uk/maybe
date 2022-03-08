@@ -1,8 +1,6 @@
 import { Option } from "../option";
 import { AsyncResult } from "./async-result";
-import * as Result from "./result";
-
-import { UnwrapErrError, UnwrapOkError, ResultLike } from "./result-like";
+import { Result, UnwrapErrError, UnwrapOkError } from "./result";
 
 describe("[AsyncResult]", () => {
     const exampleError = new Error("failure");
@@ -320,7 +318,7 @@ describe("[AsyncResult]", () => {
         describe("when first result is err", () => {
             const cases: [
                 AsyncResult<number, Error>,
-                ResultLike<number, Error>,
+                Result<number, Error>,
             ][] = [
                 [AsyncResult.ok(2), Result.ok(2)],
                 [AsyncResult.err(exampleError), Result.err(exampleError)],

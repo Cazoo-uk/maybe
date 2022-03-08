@@ -1,6 +1,5 @@
 import { Option } from "../option";
-import * as Result from "./result";
-import { UnwrapOkError } from "./result-like";
+import { Result, UnwrapOkError } from "./result";
 
 describe("[Ok]", () => {
     describe("[and]", () => {

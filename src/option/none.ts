@@ -1,25 +1,18 @@
-import { Result, ResultLike } from "../result";
-import * as Option from "./option";
+import { Result } from "../result";
+import { IsNone, SomeSymbol, Option, UnwrapNoneError } from "./option";
 
-import {
-    UnwrapNoneError,
-    IsNone,
-    OptionLike,
-    SomeSymbol,
-} from "./option-like";
-
-export class None<T> implements OptionLike<T>, IsNone {
+export class None<T> implements Option<T>, IsNone {
     readonly [SomeSymbol] = false;
 
-    and<U>(): OptionLike<U> {
-        return this as OptionLike<any> & IsNone;
+    and<U>(): Option<U> {
+        return this as Option<any> & IsNone;
     }
 
-    andThen<U>(): OptionLike<U> {
-        return this as OptionLike<any> & IsNone;
+    andThen<U>(): Option<U> {
+        return this as Option<any> & IsNone;
     }
 
-    apply<U>(fn: (option: OptionLike<T>) => U): U {
+    apply<U>(fn: (option: Option<T>) => U): U {
         return fn(this);
     }
 
@@ -31,8 +24,8 @@ export class None<T> implements OptionLike<T>, IsNone {
         throw new UnwrapNoneError(message);
     }
 
-    filter<U extends T>(): OptionLike<U> {
-        return this as OptionLike<any> & IsNone;
+    filter<U extends T>(): Option<U> {
+        return this as Option<any> & IsNone;
     }
 
     isNone(): boolean {
@@ -47,31 +40,31 @@ export class None<T> implements OptionLike<T>, IsNone {
         return [][Symbol.iterator]();
     }
 
-    map<U>(): OptionLike<U> {
-        return this as OptionLike<any> & IsNone;
+    map<U>(): Option<U> {
+        return this as Option<any> & IsNone;
     }
 
-    mapOr<U>(or: U): OptionLike<U> {
+    mapOr<U>(or: U): Option<U> {
         return Option.some(or);
     }
 
-    mapOrElse<U>(or: () => U): OptionLike<U> {
+    mapOrElse<U>(or: () => U): Option<U> {
         return Option.some(or());
     }
 
-    okOr<E>(error: E): ResultLike<T, E> {
+    okOr<E>(error: E): Result<T, E> {
         return Result.err(error);
     }
 
-    okOrElse<E>(fn: () => E): ResultLike<T, E> {
+    okOrElse<E>(fn: () => E): Result<T, E> {
         return Result.err(fn());
     }
 
-    or<U>(option: OptionLike<U>): OptionLike<T | U> {
+    or<U>(option: Option<U>): Option<T | U> {
         return option;
     }
 
-    orElse<U>(fn: () => OptionLike<U>): OptionLike<T | U> {
+    orElse<U>(fn: () => Option<U>): Option<T | U> {
         return fn();
     }
 
@@ -87,15 +80,15 @@ export class None<T> implements OptionLike<T>, IsNone {
         return fn();
     }
 
-    xor(option: OptionLike<T>): OptionLike<T> {
+    xor(option: Option<T>): Option<T> {
         return option;
     }
 
-    zip<U>(): OptionLike<[T, U]> {
-        return this as OptionLike<any>;
+    zip<U>(): Option<[T, U]> {
+        return this as Option<any>;
     }
 
-    zipWith<_, C>(): OptionLike<C> {
-        return this as OptionLike<any> & IsNone;
+    zipWith<_, C>(): Option<C> {
+        return this as Option<any> & IsNone;
     }
 }

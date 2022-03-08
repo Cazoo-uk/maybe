@@ -1,6 +1,5 @@
-import * as Result from "./result";
 import { Option } from "../option";
-import { UnwrapErrError } from "./result-like";
+import { Result, UnwrapErrError } from "./result";
 
 describe("[Err]", () => {
     const exampleError = new Error("failure");

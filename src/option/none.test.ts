@@ -1,6 +1,5 @@
 import { Result } from "../result";
-import { UnwrapNoneError } from "./option-like";
-import * as Option from "./option";
+import { Option, UnwrapNoneError } from "./option";
 
 describe("[None]", () => {
     describe("[and]", () => {

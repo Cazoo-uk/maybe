@@ -1,12 +1,11 @@
 import { AsyncOption } from "../option";
-import * as Result from "./result";
-import { ResultLike } from "./result-like";
+import { Result } from "./result";
 
 export class AsyncResult<T, E> {
-    constructor(private readonly promise: Promise<ResultLike<T, E>>) {}
+    constructor(private readonly promise: Promise<Result<T, E>>) {}
 
     /**
-     * Convert a promise of a synchronous result ({@link ResultLike})
+     * Convert a promise of a synchronous result ({@link Result})
      * into an {@link AsyncResult}.
      *
      * ```typescript
@@ -19,13 +18,13 @@ export class AsyncResult<T, E> {
      * @since 0.1.0
      */
     static fromPromise<T, E>(
-        result: Promise<ResultLike<T, E>>,
+        result: Promise<Result<T, E>>,
     ): AsyncResult<T, E> {
         return new AsyncResult(result);
     }
 
     /**
-     * Convert a synchronous result ({@link ResultLike}) into an
+     * Convert a synchronous result ({@link Result}) into an
      * {@link AsyncResult}.
      *
      * ```typescript
@@ -37,7 +36,7 @@ export class AsyncResult<T, E> {
      * @param result Result to be converted
      * @since 0.1.0
      */
-    static fromResult<T, E>(result: ResultLike<T, E>): AsyncResult<T, E> {
+    static fromResult<T, E>(result: Result<T, E>): AsyncResult<T, E> {
         return this.fromPromise(Promise.resolve(result));
     }
 
@@ -73,7 +72,7 @@ export class AsyncResult<T, E> {
     }
 
     /**
-     * Like {@link AsyncResult.and} but accepts and returns an async
+     *  {@link AsyncResult.and} but accepts and returns an async
      * result instead.
      *
      * ```typescript
@@ -92,7 +91,7 @@ export class AsyncResult<T, E> {
     }
 
     /**
-     * Like {@link AsyncResult.andThen} but:
+     *  {@link AsyncResult.andThen} but:
      * - accepts a callback that returns an {@link AsyncResult}
      * - also returns an {@link AsyncResult}
      *
@@ -131,12 +130,12 @@ export class AsyncResult<T, E> {
      * @todo Should we expose this method at all?
      * @since 0.1.0
      */
-    asPromise(): Promise<ResultLike<T, E>> {
+    asPromise(): Promise<Result<T, E>> {
         return this.promise;
     }
 
     /**
-     * Like {@link ResultLike.contains} but returns a promise of a
+     *  {@link Result.contains} but returns a promise of a
      * boolean, rather than a boolean.
      *
      * ```typescript
@@ -154,7 +153,7 @@ export class AsyncResult<T, E> {
     }
 
     /**
-     * Like {@link ResultLike.containsErr} but returns a promise of a
+     *  {@link Result.containsErr} but returns a promise of a
      * boolean, rather than a boolean.
      *
      * ```typescript
@@ -172,7 +171,7 @@ export class AsyncResult<T, E> {
     }
 
     /**
-     * Like {@link ResultLike.err} but returns an {@link AsyncOption}.
+     *  {@link Result.err} but returns an {@link AsyncOption}.
      *
      * ```typescript
      * AsyncResult.ok(1).err();
@@ -190,7 +189,7 @@ export class AsyncResult<T, E> {
     }
 
     /**
-     * Like {@link ResultLike.expect} but returns a promise. If `Ok`,
+     *  {@link Result.expect} but returns a promise. If `Ok`,
      * the promise resolves with the ok value, else it rejects with
      * an error.
      *
@@ -209,7 +208,7 @@ export class AsyncResult<T, E> {
     }
 
     /**
-     * Like {@link ResultLike.expectErr} but returns a promise. If `Err`,
+     *  {@link Result.expectErr} but returns a promise. If `Err`,
      * the promise resolves with the error value, else it rejects with
      * an error.
      *
@@ -228,7 +227,7 @@ export class AsyncResult<T, E> {
     }
 
     /**
-     * Like {@link ResultLike.isErr} but returns a promise of a boolean.
+     *  {@link Result.isErr} but returns a promise of a boolean.
      * This function cannot be used to for type narrowing because this is
      * not possible with asynchronous code.
      *
@@ -246,7 +245,7 @@ export class AsyncResult<T, E> {
     }
 
     /**
-     * Like {@link ResultLike.isOk} but returns a promise of a boolean.
+     *  {@link Result.isOk} but returns a promise of a boolean.
      * This function cannot be used to for type narrowing because this is
      * not possible with asynchronous code.
      *
@@ -264,7 +263,7 @@ export class AsyncResult<T, E> {
     }
 
     /**
-     * Like {@link ResultLike.iter} but returns a promise of an
+     *  {@link Result.iter} but returns a promise of an
      * iterator.
      *
      * ```typescript
@@ -286,7 +285,7 @@ export class AsyncResult<T, E> {
     }
 
     /**
-     * Like {@link ResultLike.map} but returns an {@link AsyncResult}.
+     *  {@link Result.map} but returns an {@link AsyncResult}.
      *
      * ```typescript
      * AsyncResult.ok(1).map(value => value + 1);
@@ -306,7 +305,7 @@ export class AsyncResult<T, E> {
     }
 
     /**
-     * Like {@link ResultLike.mapErr} but returns an {@link AsyncResult}.
+     *  {@link Result.mapErr} but returns an {@link AsyncResult}.
      *
      * ```typescript
      * AsyncResult.ok(1).mapErr(error => error.toUpperCase());
@@ -326,7 +325,7 @@ export class AsyncResult<T, E> {
     }
 
     /**
-     * Like {@link OptionLike.mapOr} but returns a promise of a value.
+     *  {@link Option.mapOr} but returns a promise of a value.
      *
      * ```typescript
      * AsyncResult.ok(1).mapOr(0, value => value + 1);
@@ -345,7 +344,7 @@ export class AsyncResult<T, E> {
     }
 
     /**
-     * Like {@link ResultLike.mapOrElse} but returns a promise of a
+     *  {@link Result.mapOrElse} but returns a promise of a
      * value.
      *
      * ```typescript
@@ -365,7 +364,7 @@ export class AsyncResult<T, E> {
     }
 
     /**
-     * Like {@link ResultLike.ok} but returns an {@link AsyncOption}.
+     *  {@link Result.ok} but returns an {@link AsyncOption}.
      *
      * ```typescript
      * AsyncResult.ok(1).ok();
@@ -383,7 +382,7 @@ export class AsyncResult<T, E> {
     }
 
     /**
-     * Like {@link ResultLike.or} but accepts an {@link AsyncResult} and
+     *  {@link Result.or} but accepts an {@link AsyncResult} and
      * also returns one.
      *
      * ```typescript
@@ -402,7 +401,7 @@ export class AsyncResult<T, E> {
     }
 
     /**
-     * Like {@link OptionLike.orElse} but:
+     *  {@link Option.orElse} but:
      * - accepts a function that returns an async option
      * - itself returns an async option.
      *
@@ -420,20 +419,18 @@ export class AsyncResult<T, E> {
     orElse<U>(
         fn: (error: E) => AsyncResult<U, E>,
     ): AsyncResult<T | U, E> {
-        const promise = this.promise.then<ResultLike<T | U, E>>(
-            result => {
-                return result.isErr()
-                    ? fn(result.intoErr()).asPromise()
-                    : result;
-            },
-        );
+        const promise = this.promise.then<Result<T | U, E>>(result => {
+            return result.isErr()
+                ? fn(result.intoErr()).asPromise()
+                : result;
+        });
 
         return new AsyncResult(promise);
     }
 
     /**
      * Call the provided function with a synchronous version of this
-     * result. This fulfils the same role as {@link ResultLike.apply}, in
+     * result. This fulfils the same role as {@link Result.apply}, in
      * that it can be used to apply a function to this result.
      *
      * ```typescript
@@ -446,13 +443,13 @@ export class AsyncResult<T, E> {
      * @since 0.1.0
      */
     transform<U, F>(
-        fn: (result: ResultLike<T, E>) => ResultLike<U, F>,
+        fn: (result: Result<T, E>) => Result<U, F>,
     ): AsyncResult<U, F> {
         return new AsyncResult(this.promise.then(fn));
     }
 
     /**
-     * Like {@link ResultLike.unwrap} but returns a promise. If `Ok`,
+     *  {@link Result.unwrap} but returns a promise. If `Ok`,
      * the promise resolves with the wrapped value, else it rejects with
      * an error.
      *
@@ -471,7 +468,7 @@ export class AsyncResult<T, E> {
     }
 
     /**
-     * Like {@link ResultLike.unwrapErr} but returns a promise. If `Err`,
+     *  {@link Result.unwrapErr} but returns a promise. If `Err`,
      * the promise resolves with the wrapped error, else it rejects with
      * an error.
      *
@@ -490,7 +487,7 @@ export class AsyncResult<T, E> {
     }
 
     /**
-     * Like {@link ResultLike.unwrapOr} but returns a promise. The
+     *  {@link Result.unwrapOr} but returns a promise. The
      * promise resolves with the wrapped value (if `Ok`) or the default.
      *
      * ```typescript
@@ -508,7 +505,7 @@ export class AsyncResult<T, E> {
     }
 
     /**
-     * Like {@link ResultLike.unwrapOrElse} but returns a promise. The
+     *  {@link Result.unwrapOrElse} but returns a promise. The
      * promise resolves with the wrapped value (if `Ok`) or the result of
      * the callback.
      *
@@ -529,10 +526,7 @@ export class AsyncResult<T, E> {
 
     private unwrapAnd<U, C>(
         other: AsyncResult<U, E>,
-        fn: (
-            a: ResultLike<T, E>,
-            b: ResultLike<U, E>,
-        ) => ResultLike<C, E>,
+        fn: (a: Result<T, E>, b: Result<U, E>) => Result<C, E>,
     ): AsyncResult<C, E> {
         return new AsyncResult(
             this.promise.then(result =>

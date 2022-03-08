@@ -1,5 +1,5 @@
 import { Option } from "../option";
-import * as Result from "./result";
+import { Result } from "./result";
 
 describe("[Result]", () => {
     describe("[isResult]", () => {
