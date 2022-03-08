@@ -10,5 +10,4 @@ jobs:
             - name: Make stable release to npm
               uses: ./.github/actions/npm-release
               with:
-                  type: stable
                   token: ${{ secrets.CAZOO_NPM_TOKEN }}

@@ -1,6 +1,11 @@
 name: NPM release
-
 description: Publish to NPM
+
+inputs:
+  token:
+    description: Cazoo NPM token
+    required: true
+
 runs:
   using: composite
   steps:
