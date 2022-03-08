@@ -1,0 +1,16 @@
+name: NPM release
+
+description: Publish to NPM
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 16
+        registry-url: https://registry.npmjs.org/
+    - name: Publish to NPM
+      env:
+        NODE_AUTH_TOKEN: ${{secrets.CAZOO_NPM_TOKEN}}
+      shell: bash
+      run: npm publish --access public
