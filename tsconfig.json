@@ -8,7 +8,7 @@
         "noUnusedLocals": false,
         "noUnusedParameters": true,
         "outDir": "lib",
-        "strict": false,
+        "strict": true,
         "target": "esnext"
     },
     "include": ["src/*.ts"],
