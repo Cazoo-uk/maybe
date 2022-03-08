@@ -13,7 +13,7 @@
         "preversion": "npm run lint",
         "version": "npm run fix && git add -A src",
         "postversion": "git push && git push --tags",
-        "doc:generate": "typedoc --out maybe.wiki/wiki --excludePrivate --theme github-wiki --readme none src"
+        "doc:generate": "typedoc --out maybe.wiki/wiki --excludePrivate --readme none src"
     },
     "files": [
         "lib/**/*"
@@ -34,7 +34,6 @@
         "ts-jest": "^27.1.3",
         "ts-loader": "^5.3.3",
         "typedoc": "^0.22.11",
-        "typedoc-github-wiki-theme": "^1.0.0",
         "typescript": "^4.5.5"
     }
 }

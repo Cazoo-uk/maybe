@@ -8,7 +8,7 @@ jobs:
         steps:
             - uses: actions/checkout@v1
             - name: Make stable release to npm
-              uses: esamattis/npm-release@v2
+              uses: ./.github/actions/npm-release
               with:
                   type: stable
                   token: ${{ secrets.CAZOO_NPM_TOKEN }}
