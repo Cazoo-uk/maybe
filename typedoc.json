@@ -1,0 +1,6 @@
+{
+    "excludePrivate": true,
+    "githubPages": true,
+    "out": "./docs",
+    "readme": "./OVERVIEW.md"
+}

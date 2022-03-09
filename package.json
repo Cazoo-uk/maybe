@@ -13,7 +13,7 @@
         "preversion": "npm run lint",
         "version": "npm run fix && npm run doc && git add -A src docs",
         "postversion": "git push && git push --tags",
-        "doc": "typedoc --out docs/ --excludePrivate --readme none --githubPages src"
+        "doc": "typedoc src"
     },
     "files": [
         "lib/**/*"
