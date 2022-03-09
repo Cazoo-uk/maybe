@@ -11,9 +11,9 @@
         "prepare": "npm run build",
         "prepublishOnly": "npm run test && npm run lint",
         "preversion": "npm run lint",
-        "version": "npm run fix && git add -A src",
-        "postversion": "git push && git push --tags",
-        "doc:generate": "typedoc --out maybe.wiki/wiki --excludePrivate --readme none src"
+        "version": "npm run fix && npm run doc && git add -A src docs",
+        "postversion": "exit; git push && git push --tags",
+        "doc": "typedoc --out docs/ --excludePrivate --readme none --githubPages src"
     },
     "files": [
         "lib/**/*"
