@@ -14,6 +14,10 @@ export class UnwrapNoneError extends Error {}
  * Type `Option` represents an optional value: every Option is either
  * `Some` and contains a value, or `None`, and does not.
  *
+ * **Note**: when exported, this interface is merged with the namespace
+ * ({@link https://docs/modules/Option.html}), which contains helper methods for
+ * creating and working with options.
+ *
  * `Some` and `None` are modelled as standalone classes but note these
  * are not exposed. You can create options using the helpers methods
  * exposed by `Option`.
