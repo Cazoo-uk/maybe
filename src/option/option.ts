@@ -6,7 +6,7 @@ import { Some } from "./some";
  * Error thrown when calling {@link Option.unwrap} or
  * {@link Option.expect} on `None`. This error is a simple subclasses
  * of the normal JavaScript `Error` type.
- * @since 0.1.0
+ * @since 1.0.1
  */
 export class UnwrapNoneError extends Error {}
 
@@ -68,7 +68,7 @@ export interface Option<T> {
      * ```
      * @typeParam U Type of `option`
      * @param option Returns this if option is not None
-     * @since 0.1.0
+     * @since 1.0.1
      */
     and<U>(option: Option<U>): Option<U>;
 
@@ -87,7 +87,7 @@ export interface Option<T> {
      * ```
      * @typeParam U Wrapped type of option returned by `fn`
      * @param fn Call this with wrapped value
-     * @since 0.1.0
+     * @since 1.0.1
      */
     andThen<U>(fn: (value: T) => Option<U>): Option<U>;
 
@@ -108,7 +108,7 @@ export interface Option<T> {
      * ```
      * @param fn Passes the option to this callback
      * @typeParam U Return type of `fn`
-     * @since 0.1.0
+     * @since 1.0.1
      */
     apply<U>(fn: (option: Option<T>) => U): U;
 
@@ -129,7 +129,7 @@ export interface Option<T> {
      * // false, because objects compare by identity
      * ```
      * @param value Compares against this value
-     * @since 0.1.0
+     * @since 1.0.1
      */
     contains(value: T): boolean;
 
@@ -151,7 +151,7 @@ export interface Option<T> {
      * // throws error
      * ```
      * @param message Use this in the error
-     * @since 0.1.0
+     * @since 1.0.1
      * @throws {@link EmptyOptionError}
      */
     expect(message: string): T;
@@ -185,7 +185,7 @@ export interface Option<T> {
      *
      * ```
      * @typeParam U Narrow wrapped value to this type
-     * @since 0.1.0
+     * @since 1.0.1
      * @param fn Predicate function
      */
     filter<U extends T>(fn: (value: T) => value is U): Option<U>;
@@ -206,7 +206,7 @@ export interface Option<T> {
      * Option.none().filter(value => value === 2);
      * // returns Option.none()
      * ```
-     * @since 0.1.0
+     * @since 1.0.1
      * @param fn Predicate function
      */
     filter(fn: (value: T) => boolean): Option<T>;
@@ -222,7 +222,7 @@ export interface Option<T> {
      * Option.none().isNone();
      * // returns true
      * ```
-     * @since 0.1.0
+     * @since 1.0.1
      */
     isNone(): this is IsNone;
 
@@ -244,7 +244,7 @@ export interface Option<T> {
      * Option.none().isNone();
      * // returns false
      * ```
-     * @since 0.1.0
+     * @since 1.0.1
      */
     isSome(): this is IsSome<T>;
 
@@ -265,7 +265,7 @@ export interface Option<T> {
      * ```
      * @todo It's not clear why this might be useful in JavaScript.
      * Should we remove this?
-     * @since 0.1.0
+     * @since 1.0.1
      */
     iter(): IterableIterator<T>;
 
@@ -288,7 +288,7 @@ export interface Option<T> {
      * ```
      * @typeParam U Map to option of this type
      * @param fn Call this with wrapped value
-     * @since 0.1.0
+     * @since 1.0.1
      */
     map<U>(fn: (value: T) => U): Option<U>;
 
@@ -316,7 +316,7 @@ export interface Option<T> {
      * @typeParam U Map to option of this type
      * @param or Use this value if option is empty
      * @param fn Call this with wrapped value if non-empty
-     * @since 0.1.0
+     * @since 1.0.1
      */
     mapOr<U>(or: U, fn: (value: T) => U): Option<U>;
 
@@ -340,7 +340,7 @@ export interface Option<T> {
      * @typeParam U Map to option of this type
      * @param or Use this callback if option is empty
      * @param fn Call this with wrapped value if non-empty
-     * @since 0.1.0
+     * @since 1.0.1
      */
     mapOrElse<U>(or: () => U, fn: (value: T) => U): Option<U>;
 
@@ -363,7 +363,7 @@ export interface Option<T> {
      * ```
      * @typeParam E Error type
      * @param error Use this error value when the option is empty
-     * @since 0.1.0
+     * @since 1.0.1
      */
     okOr<E>(error: E): Result<T, E>;
 
@@ -384,7 +384,7 @@ export interface Option<T> {
      * ```
      * @typeParam E Error type
      * @param fn Use result of this callback when the option is empty
-     * @since 0.1.0
+     * @since 1.0.1
      */
     okOrElse<E>(fn: () => E): Result<T, E>;
 
@@ -405,7 +405,7 @@ export interface Option<T> {
      * ```
      * @typeParam U Type of wrapped value in other option
      * @param option Return this if this option is `None`
-     * @since 0.1.0
+     * @since 1.0.1
      */
     or<U>(option: Option<U>): Option<T | U>;
 
@@ -423,7 +423,7 @@ export interface Option<T> {
      * ```
      * @typeParam U Type of wrapped value in callback result
      * @param fn Call this if this option is empty
-     * @since 0.1.0
+     * @since 1.0.1
      */
     orElse<U>(fn: () => Option<U>): Option<T | U>;
 
@@ -445,7 +445,7 @@ export interface Option<T> {
      * // throws error
      * ```
      * @throws {@link EmptyOptionError}
-     * @since 0.1.0
+     * @since 1.0.1
      */
     unwrap(): T;
 
@@ -466,7 +466,7 @@ export interface Option<T> {
      * ```
      * @typeParam U Type of default value
      * @param value Use this if option is empty
-     * @since 0.1.0
+     * @since 1.0.1
      */
     unwrapOr<U>(value: U): T | U;
 
@@ -484,7 +484,7 @@ export interface Option<T> {
      * ```
      * @typeParam U Type returned by callback
      * @param fn Call this and return value if option is empty
-     * @since 0.1.0
+     * @since 1.0.1
      */
     unwrapOrElse<U>(fn: () => U): T | U;
 
@@ -507,7 +507,7 @@ export interface Option<T> {
      * ```
      * @param option The other option
      * @typeParam U Wrapped type of other option
-     * @since 0.1.0
+     * @since 1.0.1
      */
     xor<U>(option: Option<T>): Option<T | U>;
 
@@ -526,7 +526,7 @@ export interface Option<T> {
      * ```
      * @typeParam U Wrapped type of other option
      * @param option Zip with this option
-     * @since 0.1.0
+     * @since 1.0.1
      */
     zip<U>(option: Option<U>): Option<[T, U]>;
 
@@ -594,7 +594,7 @@ export interface IsSome<T> {
      *   }
      * }
      * ```
-     * @since 0.1.0
+     * @since 1.0.1
      */
     intoSome(): T;
 }
@@ -647,7 +647,7 @@ export namespace Option {
      * the default.
      *
      * @typeParam T Type of wrapped value
-     * @since 0.1.0
+     * @since 1.0.1
      */
     export type Undecided<T> = Option<T> & (IsSome<T> | IsNone);
 
@@ -667,7 +667,7 @@ export namespace Option {
      * @todo Can we extend this to work for any level of nesting?
      * @typeParam T Type of wrapped value
      * @param option To be flattened
-     * @since 0.1.0
+     * @since 1.0.1
      */
     export const flatten = <T>(option: Option<Option<T>>): Option<T> => {
         return option.unwrapOr(none());
@@ -686,7 +686,7 @@ export namespace Option {
      * ```
      * @typeParam T Type of value to be wrapped
      * @param value The value to be wrapped
-     * @since 0.1.0
+     * @since 1.0.1
      */
     export const fromOptional = <T>(
         value: T | null | undefined,
@@ -718,7 +718,7 @@ export namespace Option {
      * ```
      * @typeParam T Type of wrapped value
      * @param value Test against this
-     * @since 0.1.0
+     * @since 1.0.1
      */
     export const isOption = <T>(value: any): value is Option<T> => {
         return value instanceof Some || value instanceof None;
@@ -734,7 +734,7 @@ export namespace Option {
      * ```
      * @typeParam T Type of wrapped value (for compatibility with
      * {@link Option} interface).
-     * @since 0.1.0
+     * @since 1.0.1
      */
     export const none = <T = never>(): Option<T> & IsNone => {
         return new None<T>();
@@ -750,7 +750,7 @@ export namespace Option {
      * ```
      * @typeParam T Type of wrapped value
      * @param value Value to be wrapped
-     * @since 0.1.0
+     * @since 1.0.1
      */
     export const some = <T>(value: T): Option<T> & IsSome<T> => {
         return new Some(value);
@@ -774,7 +774,7 @@ export namespace Option {
      * @typeParam E Type of error value
      * @typeParam T Type of ok value
      * @param option Option to be transposed
-     * @since 0.1.0
+     * @since 1.0.1
      */
     export const transpose = <T, E>(
         option: Option<Result<T, E>>,
@@ -796,7 +796,7 @@ export namespace Option {
      * @typeParam A Type of first zipped value
      * @typeParam B Type of second zipped value
      * @param option Option to be unzipped
-     * @since 0.1.0
+     * @since 1.0.1
      */
     export const unzip = <A, B>(
         option: Option<[A, B]>,
