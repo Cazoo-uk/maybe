@@ -90,10 +90,27 @@ export class AsyncOption<T> {
      * ```
      * @typeParam T Type of wrapped value
      * @param option Option to be converted
-     * @since 0.1.0
+     * @since 1.0.1
      */
     static fromOption<T>(option: Option<T>): AsyncOption<T> {
-        return this.fromPromise(Promise.resolve(option));
+        return this.fromPromiseOfOption(Promise.resolve(option));
+    }
+
+    /**
+     * Like {@link Option.fromOptional} but creates an async option.
+     *
+     * ```typescript
+     * const value: null | number = 1;
+     * AsyncOption.fromOptional(value);
+     * ```
+     * @typeParam T Type of wrapped value
+     * @param value Option to be converted
+     * @since 1.1.0
+     */
+    static fromOptional<T>(value: T | null | undefined): AsyncOption<T> {
+        return this.fromPromiseOfOption(
+            Promise.resolve(Option.fromOptional(value)),
+        );
     }
 
     /**
@@ -102,13 +119,15 @@ export class AsyncOption<T> {
      *
      * ```typescript
      * const promise = Promise.resolve(Option.some(1));
-     * AsyncOption.fromPromise(option);
+     * AsyncOption.fromPromiseOfOption(option);
      * ```
      * @typeParam T Type of wrapped value
      * @param promise Promise of option to be convert
-     * @since 0.1.0
+     * @since 1.1.0
      */
-    static fromPromise<T>(promise: Promise<Option<T>>): AsyncOption<T> {
+    static fromPromiseOfOption<T>(
+        promise: Promise<Option<T>>,
+    ): AsyncOption<T> {
         return new AsyncOption(promise);
     }
 
@@ -120,7 +139,7 @@ export class AsyncOption<T> {
      * ```
      * @typeParam T Type of value to be wrapped
      * @param value Value to be wrapped
-     * @since 0.1.0
+     * @since 1.0.1
      */
     static some<T>(value: T): AsyncOption<T> {
         return this.fromOption(Option.some(value));
@@ -132,7 +151,7 @@ export class AsyncOption<T> {
      * ```typescript
      * const example = AsyncOption.none();
      * ```
-     * @since 0.1.0
+     * @since 1.0.1
      * @typeParam T Type of wrapped value (for compatibility with
      * {@link AsyncOption} interface)
      */
@@ -152,7 +171,7 @@ export class AsyncOption<T> {
      * // returns AsyncOption.none()
      * ```
      *
-     * @since 0.1.0
+     * @since 1.0.1
      * @typeParam U Type of other option value
      * @param option The other option
      */
@@ -174,7 +193,7 @@ export class AsyncOption<T> {
      * ```
      * @typeParam U Wrapped value of {@link AsyncOption} returned by `fn`
      * @param fn Calls this with deferred value
-     * @since 0.1.0
+     * @since 1.0.1
      */
     andThen<U>(fn: (value: T) => AsyncOption<U>): AsyncOption<U> {
         return new AsyncOption(
@@ -198,7 +217,7 @@ export class AsyncOption<T> {
      * // resolves to true
      * ```
      * @todo Should we expose this method at all?
-     * @since 0.1.0
+     * @since 1.0.1
      */
     asPromise(): Promise<Option<T>> {
         return this.promise;
@@ -216,7 +235,7 @@ export class AsyncOption<T> {
      * // resolves to false
      * ```
      * @param value Check for this value
-     * @since 0.1.0
+     * @since 1.0.1
      */
     contains(value: T): Promise<boolean> {
         return this.promise.then(option => option.contains(value));
@@ -235,7 +254,7 @@ export class AsyncOption<T> {
      * // rejects
      * ```
      * @param message
-     * @since 0.1.0
+     * @since 1.0.1
      */
     expect(message: string): Promise<T> {
         return this.promise.then(option => option.expect(message));
@@ -264,7 +283,7 @@ export class AsyncOption<T> {
      * ```
      * @typeParam U Narrow option to this type
      * @param fn Call this with wrapped value
-     * @since 0.1.0
+     * @since 1.0.1
      */
     filter<U extends T>(fn: (value: T) => value is U): AsyncOption<U>;
 
@@ -282,7 +301,7 @@ export class AsyncOption<T> {
      * // returns Option.none()
      * ```
      * @param fn Call this with wrapped value
-     * @since 0.1.0
+     * @since 1.0.1
      */
     filter(fn: (value: T) => boolean): AsyncOption<T>;
 
@@ -304,7 +323,7 @@ export class AsyncOption<T> {
      * AsyncOption.none().isNone();
      * // resolves to true
      * ```
-     * @since 0.1.0
+     * @since 1.0.1
      */
     isNone(): Promise<boolean> {
         return this.promise.then(option => option.isNone());
@@ -322,7 +341,7 @@ export class AsyncOption<T> {
      * AsyncOption.none().isSome();
      * // resolves to false
      * ```
-     * @since 0.1.0
+     * @since 1.0.1
      */
     isSome(): Promise<boolean> {
         return this.promise.then(option => option.isSome());
@@ -344,7 +363,7 @@ export class AsyncOption<T> {
      * AsyncOption.none().iter().then(iterator => iterator.next());
      * // resolves to done
      * ```
-     * @since 0.1.0
+     * @since 1.0.1
      */
     iter(): Promise<IterableIterator<T>> {
         return this.promise.then(option => option.iter());
@@ -362,7 +381,7 @@ export class AsyncOption<T> {
      * ```
      * @typeParam U Callback returns this type
      * @param fn Call wrapped value with this
-     * @since 0.1.0
+     * @since 1.0.1
      */
     map<U>(fn: (value: T) => U): AsyncOption<U> {
         return new AsyncOption(
@@ -383,7 +402,7 @@ export class AsyncOption<T> {
      * @typeParam U Map to option of this type
      * @param or Use this value if option is empty
      * @param fn Call this with wrapped value if non-empty
-     * @since 0.1.0
+     * @since 1.0.1
      */
     mapOr<U>(or: U, fn: (value: T) => U): AsyncOption<U> {
         return new AsyncOption(
@@ -404,7 +423,7 @@ export class AsyncOption<T> {
      * @typeParam U Map tp option of this type
      * @param or Call this if wrapped value is empty
      * @param fn Call this with wrapped value if non-empty
-     * @since 0.1.0
+     * @since 1.0.1
      */
     mapOrElse<U>(or: () => U, fn: (value: T) => U): AsyncOption<U> {
         return new AsyncOption(
@@ -426,10 +445,10 @@ export class AsyncOption<T> {
      * ```
      * @typeParam E Error type
      * @param error Return result of this error if option is empty
-     * @since 0.1.0
+     * @since 1.0.1
      */
     okOr<E>(error: E): AsyncResult<T, E> {
-        return AsyncResult.fromPromise(
+        return AsyncResult.fromPromiseOfResult(
             this.promise.then(option => option.okOr(error)),
         );
     }
@@ -448,10 +467,10 @@ export class AsyncOption<T> {
      * ```
      * @typeParam E Error type
      * @param fn Create result from this callback if option is empty
-     * @since 0.1.0
+     * @since 1.0.1
      */
     okOrElse<E>(fn: () => E): AsyncResult<T, E> {
-        return AsyncResult.fromPromise(
+        return AsyncResult.fromPromiseOfResult(
             this.promise.then(option => option.okOrElse(fn)),
         );
     }
@@ -469,7 +488,7 @@ export class AsyncOption<T> {
      * ```
      * @typeParam U Type of wrapped value in other option
      * @param option Return this if this option is `None`
-     * @since 0.1.0
+     * @since 1.0.1
      */
     or<U>(option: AsyncOption<U>): AsyncOption<T | U> {
         return this.unwrapAnd(option, (a, b) => a.or(b));
@@ -489,7 +508,7 @@ export class AsyncOption<T> {
      * ```
      * @typeParam U Type of wrapped value in callback result
      * @param fn Call this if this option is empty
-     * @since 0.1.0
+     * @since 1.0.1
      */
     orElse<U>(fn: () => AsyncOption<U>): AsyncOption<T | U> {
         return new AsyncOption(
@@ -511,7 +530,7 @@ export class AsyncOption<T> {
      * ```
      * @typeParam U Returns async option of this type
      * @param fn Call this the inner option
-     * @since 0.1.0
+     * @since 1.0.1
      */
     transform<U>(fn: (value: Option<T>) => Option<U>): AsyncOption<U> {
         return new AsyncOption(this.promise.then(fn));
@@ -529,7 +548,7 @@ export class AsyncOption<T> {
      * AsyncOption.none().unwrap();
      * // rejects
      * ```
-     * @since 0.1.0
+     * @since 1.0.1
      * @throws {@link EmptyOptionError}
      */
     unwrap(): Promise<T> {
@@ -548,7 +567,7 @@ export class AsyncOption<T> {
      * // resolves to 0
      * ```
      * @typeParam U Type of default value
-     * @since 0.1.0
+     * @since 1.0.1
      */
     unwrapOr<U>(value: U): Promise<T | U> {
         return this.promise.then(option => option.unwrapOr(value));
@@ -568,7 +587,7 @@ export class AsyncOption<T> {
      * ```
      * @typeParam U Type returned by callback
      * @param fn Call this and return value if option is empty
-     * @since 0.1.0
+     * @since 1.0.1
      */
     unwrapOrElse<U>(fn: () => U): Promise<T | U> {
         return this.promise.then(option => option.unwrapOrElse(fn));
@@ -593,7 +612,7 @@ export class AsyncOption<T> {
      * ```
      * @param option The other option
      * @typeParam U Wrapped type of other option
-     * @since 0.1.0
+     * @since 1.0.1
      */
     xor<U>(option: AsyncOption<T>): AsyncOption<T | U> {
         return this.unwrapAnd(option, (a, b) => a.xor(b));
@@ -612,7 +631,7 @@ export class AsyncOption<T> {
      * ```
      * @typeParam U Wrapped type of other option
      * @param option Zip with this option
-     * @since 0.1.0
+     * @since 1.0.1
      */
     zip<U>(option: AsyncOption<U>): AsyncOption<[T, U]> {
         return this.unwrapAnd(option, (a, b) => a.zip(b));

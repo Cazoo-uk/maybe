@@ -5,14 +5,14 @@ import { Ok } from "./ok";
 /**
  * Error thrown when calling {@link Result.unwrap} on `Err`. This
  * error is a simple subclasses of the normal JavaScript `Error` type.
- * @since 0.1.0
+ * @since 1.0.1
  */
 export class UnwrapErrError extends Error {}
 
 /**
  * Error thrown when calling {@link Result.unwrapErr} on `Ok`. This
  * error is a simple subclasses of the normal JavaScript `Error` type.
- * @since 0.1.0
+ * @since 1.0.1
  */
 export class UnwrapOkError extends Error {}
 
@@ -70,7 +70,7 @@ export interface Result<T, E> {
      * ```
      * @typeParam U Ok type of other result
      * @param result Return this if this result is ok
-     * @since 0.1.0
+     * @since 1.0.1
      */
     and<U>(result: Result<U, E>): Result<U, E>;
 
@@ -88,7 +88,7 @@ export interface Result<T, E> {
      * ```
      * @typeParam U Ok type of other result
      * @param fn Call this with ok value
-     * @since 0.1.0
+     * @since 1.0.1
      */
     andThen<U>(fn: (value: T) => Result<U, E>): Result<U, E>;
 
@@ -109,7 +109,7 @@ export interface Result<T, E> {
      * ```
      * @param fn Passes the result to this callback
      * @typeParam U Return type of `fn`
-     * @since 0.1.0
+     * @since 1.0.1
      */
     apply<U>(fn: (value: Result<T, E>) => U): U;
 
@@ -130,7 +130,7 @@ export interface Result<T, E> {
      * // false, because objects compare by identity
      * ```
      * @param value Compares against this value
-     * @since 0.1.0
+     * @since 1.0.1
      */
     contains(value: T): boolean;
 
@@ -151,7 +151,7 @@ export interface Result<T, E> {
      * // false, because objects compare by identity
      * ```
      * @param error Compares against this value
-     * @since 0.1.0
+     * @since 1.0.1
      */
     containsErr(error: E): boolean;
 
@@ -167,7 +167,7 @@ export interface Result<T, E> {
      * Result.err(someError).err();
      * // returns Option.some(someError)
      * ```
-     * @since 0.1.0
+     * @since 1.0.1
      */
     err(): Option<E>;
 
@@ -190,7 +190,7 @@ export interface Result<T, E> {
      * // throws error
      * ```
      * @param message Use this in the error
-     * @since 0.1.0
+     * @since 1.0.1
      * @throws {@link EmptyResultError}
      */
     expect(message: string): T;
@@ -213,7 +213,7 @@ export interface Result<T, E> {
      * // returns someError
      * ```
      * @param message Use this in the error
-     * @since 0.1.0
+     * @since 1.0.1
      * @throws {@link ResultIsOkError}
      */
     expectErr(message: string): E;
@@ -233,7 +233,7 @@ export interface Result<T, E> {
      * // returns someError
      * ```
      * @todo To implement!
-     * @since 0.1.0
+     * @since 1.0.1
      */
     intoOkOrError(): T | E;
 
@@ -255,7 +255,7 @@ export interface Result<T, E> {
      * Result.ok(1).isErr();
      * // returns false
      * ```
-     * @since 0.1.0
+     * @since 1.0.1
      */
     isErr(): this is IsErr<E>;
 
@@ -277,7 +277,7 @@ export interface Result<T, E> {
      * Result.ok(1).isOk();
      * // returns false
      * ```
-     * @since 0.1.0
+     * @since 1.0.1
      */
     isOk(): this is IsOk<T>;
 
@@ -298,7 +298,7 @@ export interface Result<T, E> {
      * ```
      * @todo It's not clear why this might be useful in JavaScript.
      * Should we remove this?
-     * @since 0.1.0
+     * @since 1.0.1
      */
     iter(): IterableIterator<T>;
 
@@ -321,7 +321,7 @@ export interface Result<T, E> {
      * ```
      * @typeParam U Map to result of this type
      * @param fn Call this with wrapped value
-     * @since 0.1.0
+     * @since 1.0.1
      */
     map<U>(fn: (value: T) => U): Result<U, E>;
 
@@ -344,7 +344,7 @@ export interface Result<T, E> {
      * ```
      * @typeParam F Map to result of this error type
      * @param fn Call this with wrapped error
-     * @since 0.1.0
+     * @since 1.0.1
      */
     mapErr<F>(fn: (error: E) => F): Result<T, F>;
 
@@ -372,7 +372,7 @@ export interface Result<T, E> {
      * @typeParam U Map to result of this type
      * @param or Use this value if result is `Err`
      * @param fn Call this with wrapped value if `Ok`
-     * @since 0.1.0
+     * @since 1.0.1
      */
     mapOr<U>(or: U, fn: (value: T) => U): U;
 
@@ -397,7 +397,7 @@ export interface Result<T, E> {
      * @typeParam U Map to result of this type
      * @param or Use this callback if result is `Err`
      * @param fn Call this with wrapped value if `Ok`
-     * @since 0.1.0
+     * @since 1.0.1
      */
     mapOrElse<U>(or: (error: E) => U, fn: (value: T) => U): U;
 
@@ -413,7 +413,7 @@ export interface Result<T, E> {
      * Result.err(someError).ok().isSome();
      * // returns Option.none()
      * ```
-     * @since 0.1.0
+     * @since 1.0.1
      */
     ok(): Option<T>;
 
@@ -433,7 +433,7 @@ export interface Result<T, E> {
      * ```
      * @typeParam U Ok type of other result
      * @param result Return this if this result is `Err`
-     * @since 0.1.0
+     * @since 1.0.1
      */
     or<U>(result: Result<U, E>): Result<T | U, E>;
 
@@ -451,7 +451,7 @@ export interface Result<T, E> {
      * ```
      * @typeParam U Type of ok value in callback result
      * @param fn Call this if this result is `Err`
-     * @since 0.1.0
+     * @since 1.0.1
      */
     orElse<U>(fn: (error: E) => Result<U, E>): Result<T | U, E>;
 
@@ -474,7 +474,7 @@ export interface Result<T, E> {
      * // throws error
      * ```
      * @todo Should this throw the contained error?
-     * @since 0.1.0
+     * @since 1.0.1
      * @throws {@link EmptyResultError}
      */
     unwrap(): T;
@@ -496,7 +496,7 @@ export interface Result<T, E> {
      * Result.err(someError).unwrap();
      * // returns someError
      * ```
-     * @since 0.1.0
+     * @since 1.0.1
      * @throws {@link ResultIsOkError}
      */
     unwrapErr(): E;
@@ -518,7 +518,7 @@ export interface Result<T, E> {
      * ```
      * @typeParam U Type of default value
      * @param value Use this if result is `Err`
-     * @since 0.1.0
+     * @since 1.0.1
      */
     unwrapOr<U>(value: U): T | U;
 
@@ -536,7 +536,7 @@ export interface Result<T, E> {
      * ```
      * @typeParam U Type returned by callback
      * @param fn Call this and return value if result is `Err`
-     * @since 0.1.0
+     * @since 1.0.1
      */
     unwrapOrElse<U>(fn: (error: E) => U): T | U;
 }
@@ -569,7 +569,7 @@ export interface IsErr<T> {
      *   }
      * }
      * ```
-     * @since 0.1.0
+     * @since 1.0.1
      */
     intoErr(): T;
 }
@@ -600,7 +600,7 @@ export interface IsOk<T> {
      *   }
      * }
      * ```
-     * @since 0.1.0
+     * @since 1.0.1
      */
     intoOk(): T;
 }
@@ -654,7 +654,7 @@ export namespace Result {
      *
      * @typeParam T Type of ok value
      * @typeParam E Type of error value
-     * @since 0.1.0
+     * @since 1.0.1
      */
     export type Undecided<T, E> = Result<T, E> & (IsOk<T> | IsErr<E>);
 
@@ -671,7 +671,7 @@ export namespace Result {
      * @typeParam T Type of ok value (for compatibility with
      * {@link Result} interface)
      * @typeParam E Type of error value
-     * @since 0.1.0
+     * @since 1.0.1
      */
     export const err = <T, E = never>(
         error: T,
@@ -695,7 +695,7 @@ export namespace Result {
      * @todo Can we extend this to work for any level of nesting?
      * @typeParam T Type of wrapped value
      * @param result To be flattened
-     * @since 0.1.0
+     * @since 1.0.1
      */
     export const flatten = <T, E>(
         result: Result<Result<T, E>, E>,
@@ -726,7 +726,7 @@ export namespace Result {
      * @typeParam T Type of ok value
      * @typeParam E Type of error value
      * @param value Test against this
-     * @since 0.1.0
+     * @since 1.0.1
      */
     export const isResult = <T, E>(value: any): value is Result<T, E> => {
         return value instanceof Ok || value instanceof Err;
@@ -744,7 +744,7 @@ export namespace Result {
      * @typeParam E Type of error value (for compatibility with
      * {@link Result} interface)
      * @param value Value to be wrapped
-     * @since 0.1.0
+     * @since 1.0.1
      */
     export const ok = <T, E = never>(
         value: T,
@@ -770,7 +770,7 @@ export namespace Result {
      * @typeParam E Type of error value
      * @typeParam T Type of ok value
      * @param result Result to be transposed
-     * @since 0.1.0
+     * @since 1.0.1
      */
     export const transpose = <T, E>(
         result: Result<Option<T>, E>,

@@ -17,13 +17,13 @@ describe("[Option]", () => {
         });
     });
 
-    describe("[from]", () => {
+    describe("[fromOptional]", () => {
         describe("when given empty value", () => {
             const cases = [null, undefined];
 
             it.each(cases)("should be none", value => {
                 const expected = Option.none();
-                const actual = Option.from(value);
+                const actual = Option.fromOptional(value);
                 expect(actual).toEqual(expected);
             });
         });
@@ -33,7 +33,7 @@ describe("[Option]", () => {
 
             it.each(cases)("should be some of %s", value => {
                 const expected = Option.some(value);
-                const actual = Option.from(value);
+                const actual = Option.fromOptional(value);
                 expect(actual).toEqual(expected);
             });
         });

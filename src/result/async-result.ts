@@ -10,14 +10,14 @@ export class AsyncResult<T, E> {
      *
      * ```typescript
      * const promise = Promise.resolve(Result.ok(1));
-     * AsyncResult.fromPromise(promise);
+     * AsyncResult.fromPromiseOfResult(promise);
      * ```
      * @typeParam T Type of ok value
      * @typeParam E Type of err value
      * @param result Promise to be converted
-     * @since 0.1.0
+     * @since 1.1.0
      */
-    static fromPromise<T, E>(
+    static fromPromiseOfResult<T, E>(
         result: Promise<Result<T, E>>,
     ): AsyncResult<T, E> {
         return new AsyncResult(result);
@@ -34,14 +34,14 @@ export class AsyncResult<T, E> {
      * @typeParam T Type of ok value
      * @typeParam E Type of err value
      * @param result Result to be converted
-     * @since 0.1.0
+     * @since 1.0.1
      */
     static fromResult<T, E>(result: Result<T, E>): AsyncResult<T, E> {
-        return this.fromPromise(Promise.resolve(result));
+        return this.fromPromiseOfResult(Promise.resolve(result));
     }
 
     /**
-     * Create a ok {@link AsyncResult} that wraps the given value.
+     * Create an OK {@link AsyncResult} that wraps the given value.
      *
      * ```typescript
      * const example = AsyncResult.ok(1);
@@ -49,7 +49,7 @@ export class AsyncResult<T, E> {
      * @typeParam T Type of ok value
      * @typeParam E Type of error value
      * @param value Value to be wrapped
-     * @since 0.1.0
+     * @since 1.0.1
      */
     static ok<T, E = never>(value: T): AsyncResult<T, E> {
         return this.fromResult(Result.ok(value));
@@ -65,7 +65,7 @@ export class AsyncResult<T, E> {
      * @typeParam T Type of ok value
      * @typeParam E Type of error value
      * @param error Error to be wrapped
-     * @since 0.1.0
+     * @since 1.0.1
      */
     static err<E, T = never>(error: E): AsyncResult<T, E> {
         return this.fromResult(Result.err(error));
@@ -84,7 +84,7 @@ export class AsyncResult<T, E> {
      * ```
      * @typeParam U Ok type of other result
      * @param result The other result
-     * @since 0.1.0
+     * @since 1.0.1
      */
     and<U>(result: AsyncResult<U, E>): AsyncResult<U, E> {
         return this.unwrapAnd(result, (a, b) => a.and(b));
@@ -104,7 +104,7 @@ export class AsyncResult<T, E> {
      * ```
      * @typeParam U Ok type of {@link AsyncResult} returned by `fn`
      * @param fn Calls thi with deferred ok value
-     * @since 0.1.0
+     * @since 1.0.1
      */
     andThen<U>(fn: (value: T) => AsyncResult<U, E>): AsyncResult<U, E> {
         return new AsyncResult(
@@ -128,7 +128,7 @@ export class AsyncResult<T, E> {
      * // resolves to true
      * ```
      * @todo Should we expose this method at all?
-     * @since 0.1.0
+     * @since 1.0.1
      */
     asPromise(): Promise<Result<T, E>> {
         return this.promise;
@@ -146,7 +146,7 @@ export class AsyncResult<T, E> {
      * // resolves to false
      * ```
      * @param value Check for this value
-     * @since 0.1.0
+     * @since 1.0.1
      */
     contains(value: T): Promise<boolean> {
         return this.promise.then(result => result.contains(value));
@@ -164,7 +164,7 @@ export class AsyncResult<T, E> {
      * // resolves to true
      * ```
      * @param error Check for this error
-     * @since 0.1.0
+     * @since 1.0.1
      */
     containsErr(error: E): Promise<boolean> {
         return this.promise.then(result => result.containsErr(error));
@@ -180,10 +180,10 @@ export class AsyncResult<T, E> {
      * AsyncResult.err(someError).err();
      * // returns AsyncOption.some(someError)
      * ```
-     * @since 0.1.0
+     * @since 1.0.1
      */
     err(): AsyncOption<E> {
-        return AsyncOption.fromPromise(
+        return AsyncOption.fromPromiseOfOption(
             this.promise.then(result => result.err()),
         );
     }
@@ -201,7 +201,7 @@ export class AsyncResult<T, E> {
      * // rejects
      * ```
      * @param message
-     * @since 0.1.0
+     * @since 1.0.1
      */
     expect(message: string): Promise<T> {
         return this.promise.then(result => result.expect(message));
@@ -220,7 +220,7 @@ export class AsyncResult<T, E> {
      * // resolves to someError
      * ```
      * @param message
-     * @since 0.1.0
+     * @since 1.0.1
      */
     expectErr(message: string): Promise<E> {
         return this.promise.then(result => result.expectErr(message));
@@ -238,7 +238,7 @@ export class AsyncResult<T, E> {
      * AsyncResult.err(someError).isErr();
      * // resolves to true
      * ```
-     * @since 0.1.0
+     * @since 1.0.1
      */
     isErr(): Promise<boolean> {
         return this.promise.then(result => result.isErr());
@@ -256,7 +256,7 @@ export class AsyncResult<T, E> {
      * AsyncResult.err(someError).isOk();
      * // resolves to false
      * ```
-     * @since 0.1.0
+     * @since 1.0.1
      */
     isOk(): Promise<boolean> {
         return this.promise.then(result => result.isOk());
@@ -278,7 +278,7 @@ export class AsyncResult<T, E> {
      * AsyncResult.err(someError).iter().then(iterator => iterator.next());
      * // resolves to done
      * ```
-     * @since 0.1.0
+     * @since 1.0.1
      */
     iter(): Promise<IterableIterator<T>> {
         return this.promise.then(result => result.iter());
@@ -296,7 +296,7 @@ export class AsyncResult<T, E> {
      * ```
      * @typeParam U Callback returns this type
      * @param fn Call wrapped value with this
-     * @since 0.1.0
+     * @since 1.0.1
      */
     map<U>(fn: (value: T) => U): AsyncResult<U, E> {
         return new AsyncResult(
@@ -316,7 +316,7 @@ export class AsyncResult<T, E> {
      * ```
      * @typeParam U Callback returns this type
      * @param fn Call wrapped error with this
-     * @since 0.1.0
+     * @since 1.0.1
      */
     mapErr<U>(fn: (error: E) => U): AsyncResult<T, U> {
         return new AsyncResult(
@@ -325,7 +325,7 @@ export class AsyncResult<T, E> {
     }
 
     /**
-     *  {@link Option.mapOr} but returns a promise of a value.
+     * {@link Result.mapOr} but returns a promise of a value.
      *
      * ```typescript
      * AsyncResult.ok(1).mapOr(0, value => value + 1);
@@ -337,7 +337,7 @@ export class AsyncResult<T, E> {
      * @typeParam U Map to value of this type
      * @param or Use this value if `Err`
      * @param fn Call this with wrapped value if `Ok`
-     * @since 0.1.0
+     * @since 1.0.1
      */
     mapOr<U>(or: U, fn: (value: T) => U): Promise<U> {
         return this.promise.then(result => result.mapOr(or, fn));
@@ -357,7 +357,7 @@ export class AsyncResult<T, E> {
      * @typeParam U Map to value of this type
      * @param or Use this value if `Err`
      * @param fn Call this with wrapped value if `Ok`
-     * @since 0.1.0
+     * @since 1.0.1
      */
     mapOrElse<U>(or: (error: E) => U, fn: (value: T) => U): Promise<U> {
         return this.promise.then(result => result.mapOrElse(or, fn));
@@ -373,10 +373,10 @@ export class AsyncResult<T, E> {
      * AsyncResult.err(someError).ok();
      * // returns AsyncOption.none()
      * ```
-     * @since 0.1.0
+     * @since 1.0.1
      */
     ok(): AsyncOption<T> {
-        return AsyncOption.fromPromise(
+        return AsyncOption.fromPromiseOfOption(
             this.promise.then(result => result.ok()),
         );
     }
@@ -394,14 +394,14 @@ export class AsyncResult<T, E> {
      * ```
      * @typeParam U Ok type of other result
      * @param result Return this if this result is `Err`
-     * @since 0.1.0
+     * @since 1.0.1
      */
     or<U>(result: AsyncResult<U, E>): AsyncResult<T | U, E> {
         return this.unwrapAnd(result, (a, b) => a.or(b));
     }
 
     /**
-     *  {@link Option.orElse} but:
+     * {@link Result.orElse} but:
      * - accepts a function that returns an async option
      * - itself returns an async option.
      *
@@ -414,7 +414,7 @@ export class AsyncResult<T, E> {
      * ```
      * @typeParam U Ok type of result returned in callback
      * @param fn Call this if this result is `Err`
-     * @since 0.1.0
+     * @since 1.0.1
      */
     orElse<U>(
         fn: (error: E) => AsyncResult<U, E>,
@@ -440,7 +440,7 @@ export class AsyncResult<T, E> {
      * ```
      * @typeParam U Returns {@link AsyncResult} of this type
      * @param fn Call this the inner result
-     * @since 0.1.0
+     * @since 1.0.1
      */
     transform<U, F>(
         fn: (result: Result<T, E>) => Result<U, F>,
@@ -460,7 +460,7 @@ export class AsyncResult<T, E> {
      * AsyncResult.err(someError).unwrap();
      * // rejects
      * ```
-     * @since 0.1.0
+     * @since 1.0.1
      * @throws {@link EmptyResultError}
      */
     unwrap(): Promise<T> {
@@ -479,7 +479,7 @@ export class AsyncResult<T, E> {
      * AsyncResult.err(someError).unwrap();
      * // resolves with someError
      * ```
-     * @since 0.1.0
+     * @since 1.0.1
      * @throws {@link ResultIsOkError}
      */
     unwrapErr(): Promise<E> {
@@ -498,7 +498,7 @@ export class AsyncResult<T, E> {
      * // resolves to 0
      * ```
      * @typeParam U Type of default value
-     * @since 0.1.0
+     * @since 1.0.1
      */
     unwrapOr<U>(value: U): Promise<T | U> {
         return this.promise.then(result => result.unwrapOr(value));
@@ -518,7 +518,7 @@ export class AsyncResult<T, E> {
      * ```
      * @typeParam U Type returned by callback
      * @param fn Call this and return value if result is `Err`
-     * @since 0.1.0
+     * @since 1.0.1
      */
     unwrapOrElse<U>(fn: () => U): Promise<T | U> {
         return this.promise.then(result => result.unwrapOrElse(fn));
