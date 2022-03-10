@@ -116,6 +116,22 @@ describe("[AsyncOption]", () => {
         });
     });
 
+    describe("[fromOptional]", () => {
+        describe("when value exists", () => {
+            it("should be option of value", () => {
+                const actual = AsyncOption.fromOptional(1).asPromise();
+                return expect(actual).resolves.toEqual(Option.some(1));
+            });
+        });
+
+        describe("when value does not exist", () => {
+            it("should be option of none", () => {
+                const actual = AsyncOption.fromOptional(null).asPromise();
+                return expect(actual).resolves.toEqual(Option.none());
+            });
+        });
+    });
+
     describe("[isNone]", () => {
         it("should be promise of boolean", () => {
             const actual = AsyncOption.some(1).isNone();
