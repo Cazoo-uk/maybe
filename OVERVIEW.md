@@ -65,7 +65,7 @@ Option.isOption(Option.none()); // true
 
 Creating an option results in an object that implement the {@link Option} interface.
 
-Note the interface and namespace are documented on separate pages!
+Note that the interface and namespace are documented on separate pages!
 
 By contrast, {@link AsyncOption} is modelled as a class with static methods. See the individual documentation pages for
 more information about why this is.
@@ -73,6 +73,10 @@ more information about why this is.
 ### Async options
 
 Promises make it a pain to work with the synchronous option types. For example:
+
+Most async operations are liable to fail, and {@link AsyncResult} is probably a better choice in almost any
+circumstance. We've included {@link AsyncOption} to complement {@link AsyncResult}. For example, we need to return
+something async when an {@link AsyncResult} needs to create an option.
 
 ```typescript
 // generate a promise of a result 
@@ -92,10 +96,6 @@ code. The `await` calls above are no longer required.
 // using AsyncOption<T>
 someOperation().andThen(doSomething).asPromise()
 ```
-
-Most async-type operation are liable to fail, and {@link AsyncResult} is probably a better choice in almost any
-circumstance. We've included {@link AsyncOption} to complement {@link AsyncResult}. For example, we need to return
-something async when we call {@link AsyncResult.ok}.
 
 ## Results
 
@@ -151,7 +151,7 @@ Result.isResult(Result.ok(3)); // true
 
 Creating an option results in an object that implement the {@link Result} interface.
 
-Note the interface and namespace are documented on separate pages!
+Note that the interface and namespace are documented on separate pages!
 
 By contrast, {@link AsyncResult} is modelled as a class with static methods. See the individual documentation pages for
 more information about why this is.

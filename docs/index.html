@@ -40,7 +40,7 @@ and <a href="classes/AsyncResult.html">AsyncResult</a> for more information.</p>
 <pre><code class="language-typescript"><span class="hl-4">Option</span><span class="hl-1">.</span><span class="hl-5">some</span><span class="hl-1">(</span><span class="hl-3">1</span><span class="hl-1">);</span><br/><span class="hl-4">Option</span><span class="hl-1">.</span><span class="hl-5">none</span><span class="hl-1">();</span><br/><br/><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-2">mightExist</span><span class="hl-1">: </span><span class="hl-7">number</span><span class="hl-1"> | </span><span class="hl-7">null</span><span class="hl-1"> = </span><span class="hl-3">4</span><span class="hl-1">;</span><br/><span class="hl-4">Option</span><span class="hl-1">.</span><span class="hl-5">from</span><span class="hl-1">(</span><span class="hl-4">mightExist</span><span class="hl-1">);</span><br/><br/><span class="hl-4">Option</span><span class="hl-1">.</span><span class="hl-5">isOption</span><span class="hl-1">(</span><span class="hl-3">3</span><span class="hl-1">); </span><span class="hl-6">// false</span><br/><span class="hl-4">Option</span><span class="hl-1">.</span><span class="hl-5">isOption</span><span class="hl-1">(</span><span class="hl-4">Option</span><span class="hl-1">.</span><span class="hl-5">none</span><span class="hl-1">()); </span><span class="hl-6">// true</span>
 </code></pre>
 <p>Creating an option results in an object that implement the <a href="interfaces/Option.html">Option</a> interface.</p>
-<p>Note the interface and namespace are documented on separate pages!</p>
+<p>Note that the interface and namespace are documented on separate pages!</p>
 <p>By contrast, <a href="classes/AsyncOption.html">AsyncOption</a> is modelled as a class with static methods. See the individual documentation pages for
 more information about why this is.</p>
 
@@ -48,15 +48,15 @@ more information about why this is.</p>
   <h3>Async options</h3>
 </a>
 <p>Promises make it a pain to work with the synchronous option types. For example:</p>
+<p>Most async operations are liable to fail, and <a href="classes/AsyncResult.html">AsyncResult</a> is probably a better choice in almost any
+circumstance. We&#39;ve included <a href="classes/AsyncOption.html">AsyncOption</a> to complement <a href="classes/AsyncResult.html">AsyncResult</a>. For example, we need to return
+something async when an <a href="classes/AsyncResult.html">AsyncResult</a> needs to create an option.</p>
 <pre><code class="language-typescript"><span class="hl-6">// generate a promise of a result </span><br/><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-2">option</span><span class="hl-1">: </span><span class="hl-7">Promise</span><span class="hl-1">&lt;</span><span class="hl-7">Option</span><span class="hl-1">&lt;</span><span class="hl-7">T</span><span class="hl-1">&gt;&gt; = </span><span class="hl-5">someOperation</span><span class="hl-1">();</span><br/><br/><span class="hl-6">// do something with that data</span><br/><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-2">next</span><span class="hl-1"> = (</span><span class="hl-8">await</span><span class="hl-1"> </span><span class="hl-4">option</span><span class="hl-1">).</span><span class="hl-5">andThen</span><span class="hl-1">(</span><span class="hl-4">data</span><span class="hl-1"> </span><span class="hl-0">=&gt;</span><span class="hl-1"> </span><span class="hl-5">someOtherResult</span><span class="hl-1">(</span><span class="hl-4">data</span><span class="hl-1">));</span><br/><br/><span class="hl-6">// and again...</span><br/><span class="hl-1">(</span><span class="hl-8">await</span><span class="hl-1"> </span><span class="hl-4">next</span><span class="hl-1">).</span><span class="hl-5">andThen</span><span class="hl-1">(</span><span class="hl-4">data</span><span class="hl-1"> </span><span class="hl-0">=&gt;</span><span class="hl-1"> </span><span class="hl-5">someFurtherResult</span><span class="hl-1">(</span><span class="hl-4">data</span><span class="hl-1">));</span>
 </code></pre>
 <p>Asynchronous options use promises internally to abstract away this complexity. This allows you to write more concise
 code. The <code>await</code> calls above are no longer required.</p>
 <pre><code class="language-typescript"><span class="hl-6">// using AsyncOption&lt;T&gt;</span><br/><span class="hl-5">someOperation</span><span class="hl-1">().</span><span class="hl-5">andThen</span><span class="hl-1">(</span><span class="hl-4">doSomething</span><span class="hl-1">).</span><span class="hl-5">asPromise</span><span class="hl-1">()</span>
 </code></pre>
-<p>Most async-type operation are liable to fail, and <a href="classes/AsyncResult.html">AsyncResult</a> is probably a better choice in almost any
-circumstance. We&#39;ve included <a href="classes/AsyncOption.html">AsyncOption</a> to complement <a href="classes/AsyncResult.html">AsyncResult</a>. For example, we need to return
-something async when we call <a href="classes/AsyncResult.html#ok-1">AsyncResult.ok</a>.</p>
 
 <a href="#results" id="results" style="color: inherit; text-decoration: none;">
   <h2>Results</h2>
@@ -83,7 +83,7 @@ we should always expect that file I/O and HTTP calls may fail.</p>
 <pre><code class="language-typescript"><span class="hl-4">Result</span><span class="hl-1">.</span><span class="hl-5">ok</span><span class="hl-1">(</span><span class="hl-3">1</span><span class="hl-1">);</span><br/><span class="hl-4">Result</span><span class="hl-1">.</span><span class="hl-5">err</span><span class="hl-1">(</span><span class="hl-4">someError</span><span class="hl-1">);</span><br/><br/><span class="hl-4">Result</span><span class="hl-1">.</span><span class="hl-5">isResult</span><span class="hl-1">(</span><span class="hl-3">3</span><span class="hl-1">) </span><span class="hl-6">// false</span><br/><span class="hl-4">Result</span><span class="hl-1">.</span><span class="hl-5">isResult</span><span class="hl-1">(</span><span class="hl-4">Result</span><span class="hl-1">.</span><span class="hl-5">ok</span><span class="hl-1">(</span><span class="hl-3">3</span><span class="hl-1">)); </span><span class="hl-6">// true</span>
 </code></pre>
 <p>Creating an option results in an object that implement the <a href="interfaces/Result.html">Result</a> interface.</p>
-<p>Note the interface and namespace are documented on separate pages!</p>
+<p>Note that the interface and namespace are documented on separate pages!</p>
 <p>By contrast, <a href="classes/AsyncResult.html">AsyncResult</a> is modelled as a class with static methods. See the individual documentation pages for
 more information about why this is.</p>
 

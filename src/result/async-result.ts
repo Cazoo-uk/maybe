@@ -41,7 +41,7 @@ export class AsyncResult<T, E> {
     }
 
     /**
-     * Create a ok {@link AsyncResult} that wraps the given value.
+     * Create an OK {@link AsyncResult} that wraps the given value.
      *
      * ```typescript
      * const example = AsyncResult.ok(1);
@@ -325,7 +325,7 @@ export class AsyncResult<T, E> {
     }
 
     /**
-     *  {@link Option.mapOr} but returns a promise of a value.
+     * {@link Result.mapOr} but returns a promise of a value.
      *
      * ```typescript
      * AsyncResult.ok(1).mapOr(0, value => value + 1);
@@ -401,7 +401,7 @@ export class AsyncResult<T, E> {
     }
 
     /**
-     *  {@link Option.orElse} but:
+     * {@link Result.orElse} but:
      * - accepts a function that returns an async option
      * - itself returns an async option.
      *
