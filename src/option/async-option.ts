@@ -93,7 +93,24 @@ export class AsyncOption<T> {
      * @since 0.1.0
      */
     static fromOption<T>(option: Option<T>): AsyncOption<T> {
-        return this.fromPromise(Promise.resolve(option));
+        return this.fromPromiseOfOption(Promise.resolve(option));
+    }
+
+    /**
+     * Like {@link Option.fromOptional} but creates an async option.
+     *
+     * ```typescript
+     * const value: null | number = 1;
+     * AsyncOption.fromOptional(value);
+     * ```
+     * @typeParam T Type of wrapped value
+     * @param value Option to be converted
+     * @since 0.1.0
+     */
+    static fromOptional<T>(value: T | null | undefined): AsyncOption<T> {
+        return this.fromPromiseOfOption(
+            Promise.resolve(Option.fromOptional(value)),
+        );
     }
 
     /**
@@ -102,13 +119,15 @@ export class AsyncOption<T> {
      *
      * ```typescript
      * const promise = Promise.resolve(Option.some(1));
-     * AsyncOption.fromPromise(option);
+     * AsyncOption.fromPromiseOfOption(option);
      * ```
      * @typeParam T Type of wrapped value
      * @param promise Promise of option to be convert
      * @since 0.1.0
      */
-    static fromPromise<T>(promise: Promise<Option<T>>): AsyncOption<T> {
+    static fromPromiseOfOption<T>(
+        promise: Promise<Option<T>>,
+    ): AsyncOption<T> {
         return new AsyncOption(promise);
     }
 
@@ -429,7 +448,7 @@ export class AsyncOption<T> {
      * @since 0.1.0
      */
     okOr<E>(error: E): AsyncResult<T, E> {
-        return AsyncResult.fromPromise(
+        return AsyncResult.fromPromiseOfResult(
             this.promise.then(option => option.okOr(error)),
         );
     }
@@ -451,7 +470,7 @@ export class AsyncOption<T> {
      * @since 0.1.0
      */
     okOrElse<E>(fn: () => E): AsyncResult<T, E> {
-        return AsyncResult.fromPromise(
+        return AsyncResult.fromPromiseOfResult(
             this.promise.then(option => option.okOrElse(fn)),
         );
     }

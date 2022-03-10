@@ -10,14 +10,14 @@ export class AsyncResult<T, E> {
      *
      * ```typescript
      * const promise = Promise.resolve(Result.ok(1));
-     * AsyncResult.fromPromise(promise);
+     * AsyncResult.fromPromiseOfResult(promise);
      * ```
      * @typeParam T Type of ok value
      * @typeParam E Type of err value
      * @param result Promise to be converted
      * @since 0.1.0
      */
-    static fromPromise<T, E>(
+    static fromPromiseOfResult<T, E>(
         result: Promise<Result<T, E>>,
     ): AsyncResult<T, E> {
         return new AsyncResult(result);
@@ -37,7 +37,7 @@ export class AsyncResult<T, E> {
      * @since 0.1.0
      */
     static fromResult<T, E>(result: Result<T, E>): AsyncResult<T, E> {
-        return this.fromPromise(Promise.resolve(result));
+        return this.fromPromiseOfResult(Promise.resolve(result));
     }
 
     /**
@@ -183,7 +183,7 @@ export class AsyncResult<T, E> {
      * @since 0.1.0
      */
     err(): AsyncOption<E> {
-        return AsyncOption.fromPromise(
+        return AsyncOption.fromPromiseOfOption(
             this.promise.then(result => result.err()),
         );
     }
@@ -376,7 +376,7 @@ export class AsyncResult<T, E> {
      * @since 0.1.0
      */
     ok(): AsyncOption<T> {
-        return AsyncOption.fromPromise(
+        return AsyncOption.fromPromiseOfOption(
             this.promise.then(result => result.ok()),
         );
     }

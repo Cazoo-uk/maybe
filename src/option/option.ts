@@ -598,6 +598,7 @@ export interface IsSome<T> {
      */
     intoSome(): T;
 }
+
 export namespace Option {
     /**
      * A utility type which represents an option that must be *either* `Some`
@@ -677,17 +678,19 @@ export namespace Option {
      * the provided value is `null` or `undefined`, otherwise `Some(value)`.
      *
      * ```typescript
-     * Option.from(1);
+     * Option.fromOptional(1);
      * // returns Option.some(1)
      *
-     * Option.from(null);
+     * Option.fromOptional(null);
      * // returns Option.none()
      * ```
      * @typeParam T Type of value to be wrapped
      * @param value The value to be wrapped
      * @since 0.1.0
      */
-    export const from = <T>(value: T | null | undefined): Option<T> => {
+    export const fromOptional = <T>(
+        value: T | null | undefined,
+    ): Option<T> => {
         return value === null || value === undefined
             ? none()
             : some(value);
