@@ -72,6 +72,21 @@ export class AsyncResult<T, E> {
     }
 
     /**
+     * If the promise resolves, create an async `Ok` that wraps the
+     * result. If the promise rejects, create an async `Err` that wraps
+     * the error.
+     *
+     * @typeParam T Promise resolves to this type
+     * @param promise Wrap this promise
+     * @since 1.1.1
+     */
+    static wrapPromise<T>(promise: Promise<T>): AsyncResult<T, unknown> {
+        return AsyncResult.fromPromiseOfResult(
+            promise.then(Result.ok).catch(Result.err),
+        );
+    }
+
+    /**
      *  {@link AsyncResult.and} but accepts and returns an async
      * result instead.
      *
