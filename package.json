@@ -1,7 +1,7 @@
 {
     "name": "@cazoo/maybe",
     "main": "lib/index.js",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "description": "Utility types for handling uncertain values",
     "scripts": {
         "build": "tsc",
