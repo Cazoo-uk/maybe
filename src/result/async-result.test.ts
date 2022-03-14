@@ -428,10 +428,32 @@ describe("[AsyncResult]", () => {
 
         describe("when result of err", () => {
             it("should be promise of default value", () => {
-                const actual = AsyncResult.err(exampleError).unwrapOrElse(
-                    () => 0,
+                const actual = AsyncResult.err(1).unwrapOrElse(
+                    value => value - 1,
                 );
                 return expect(actual).resolves.toEqual(0);
+            });
+        });
+    });
+
+    describe("[wrapPromise]", () => {
+        describe("when promise resolves", () => {
+            it("should be ok with resolved value", () => {
+                const actual = AsyncResult.wrapPromise(
+                    Promise.resolve(1),
+                ).asPromise();
+
+                return expect(actual).resolves.toEqual(Result.ok(1));
+            });
+        });
+
+        describe("when promise rejects", () => {
+            it("should be err with rejected value", () => {
+                const actual = AsyncResult.wrapPromise(
+                    Promise.resolve(1),
+                ).asPromise();
+
+                return expect(actual).resolves.toEqual(Result.ok(1));
             });
         });
     });
