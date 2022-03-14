@@ -428,8 +428,8 @@ describe("[AsyncResult]", () => {
 
         describe("when result of err", () => {
             it("should be promise of default value", () => {
-                const actual = AsyncResult.err(exampleError).unwrapOrElse(
-                    () => 0,
+                const actual = AsyncResult.err(1).unwrapOrElse(
+                    value => value - 1,
                 );
                 return expect(actual).resolves.toEqual(0);
             });

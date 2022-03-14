@@ -520,7 +520,7 @@ export class AsyncResult<T, E> {
      * @param fn Call this and return value if result is `Err`
      * @since 1.0.1
      */
-    unwrapOrElse<U>(fn: () => U): Promise<T | U> {
+    unwrapOrElse<U>(fn: (error: E) => U): Promise<T | U> {
         return this.promise.then(result => result.unwrapOrElse(fn));
     }
 
