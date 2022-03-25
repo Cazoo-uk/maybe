@@ -652,6 +652,41 @@ export namespace Option {
     export type Undecided<T> = Option<T> & (IsSome<T> | IsNone);
 
     /**
+     * If every option given is `Some`, return an option containing an
+     * array of all values. If any option is `None`, return `None`.
+     *
+     * ```typescript
+     * Option.some(
+     *   Option.some(1),
+     *   Option.some("two"),
+     *   Option.some(3),
+     * );
+     *
+     * // returns Option.some([1, "two", 3]);
+     *
+     * Option.some(
+     *   Option.some(1),
+     *   Option.none(),
+     *   Option.some(3),
+     * );
+     *
+     * // returns Option.none()
+     * ```
+     * @typeParam T Tuple type describing expected values
+     * @param options Combine these options
+     * @since 1.1.2
+     */
+    export const all = <T extends any[]>(
+        ...options: { [K in keyof T]: Option<T[K]> }
+    ): Option<T> => {
+        return options.reduce(
+            (all, next) =>
+                all.zipWith(next, (array, value) => array.concat(value)),
+            Option.some([]),
+        );
+    };
+
+    /**
      * Turns an option of an option of a value into an option of a value. In
      * other words, it un-nests a nested option.
      *
