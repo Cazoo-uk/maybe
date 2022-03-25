@@ -2,6 +2,35 @@ import { Result } from "../result";
 import { Option } from "./option";
 
 describe("[Option]", () => {
+    describe("[all]", () => {
+        describe("when given three populated options", () => {
+            it("should be option of three values", () => {
+                const actual = Option.all(
+                    Option.some(1),
+                    Option.some("two"),
+                    Option.some(3),
+                );
+
+                expect(actual).toEqual(Option.some([1, "two", 3]));
+            });
+        });
+
+        describe("when one option is none", () => {
+            it.each([
+                [Option.none(), Option.some("two"), Option.some(3)],
+                [Option.some(1), Option.none(), Option.some(3)],
+            ])("should be option of none", () => {
+                const actual = Option.all(
+                    Option.none(),
+                    Option.some("two"),
+                    Option.some(3),
+                );
+
+                expect(actual).toEqual(Option.none());
+            });
+        });
+    });
+
     describe("[flatten]", () => {
         it("should flatten option nested once", () => {
             const actual = Option.flatten(Option.some(Option.some(1)));
